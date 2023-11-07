@@ -1,6 +1,10 @@
 ### **API response prototype**
 ```json
 {
+  "links": {
+    "self": "http://microblog.com/posts?page[number]=0&page[size]=2",
+    "next": "http://microblog.com/posts?page[number]=2&page[size]=5"
+  },
   "data": [{
     "type": "posts",
     "id": "7",
