@@ -14,8 +14,10 @@
   all: unset;
   padding: 10px;
   border-bottom: 2px solid var(--seperator-color);
+  transition: scale 200ms ease;
 }
 
 .button:hover {
   cursor: pointer;
+  scale: 1.02;
 }
