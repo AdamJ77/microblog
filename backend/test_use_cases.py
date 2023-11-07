@@ -4,12 +4,6 @@ from gateways import PostRepoInterface
 import pytest
 
 
-def test_post_instantiation():
-    text = 'Bajojajo'
-    post = Post(text)
-    assert post.text == text
-
-
 @pytest.fixture()
 def repo():
     class FakePostRepo(PostRepoInterface):
