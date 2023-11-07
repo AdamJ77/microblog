@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles/LeftBarButtons.module.css";
 import TweetButton from "./TweetButton";
+import Avatar from "./Avatar";
 
 export default function LeftBarButtons() {
   const getTextColor = (path: string) => {
@@ -29,7 +30,7 @@ export default function LeftBarButtons() {
     <div className={styles.buttons}>
       {buttons.map((button, index) => (
         <button key={index} onClick={button.onclick} className={styles.button}>
-          <img src={button.image} alt={button.text} />
+          <Avatar image={button.image} alt={button.text} />
           <span className={button.colorClass}>{button.text}</span>
         </button>
       ))}
