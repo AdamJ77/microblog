@@ -1,4 +1,4 @@
-**API response prototype**
+### **API response prototype**
 ```json
 {
   "data": [{
@@ -7,6 +7,11 @@
     "attributes": {
       "body": "Bajojajo",
       "created": "2023-04-20T18:34:59.000Z",
+      "media": [
+        "http://microblog.com/posts/7/image1.png",
+        "http://microblog.com/posts/7/image2.png",
+        "http://microblog.com/posts/7/image3.png"
+      ]
     },
     "relationships": {
       "author": {
@@ -19,6 +24,10 @@
     "attributes": {
       "body": "Eh... good enough",
       "created": "2023-11-07T23:20:47.000Z",
+      "media": [
+        "http://microblog.com/posts/13/image1.png",
+        "http://microblog.com/posts/13/image2.png"
+      ]
     },
     "relationships": {
       "author": {
@@ -32,7 +41,7 @@
     "attributes": {
       "name": "Greg",
       "avatar": {
-        "src": "http://microblog.com/users/images/Greg.png"
+        "src": "http://microblog.com/users/avatars/Greg.png"
       }
     }
   }, {
@@ -41,7 +50,7 @@
     "attributes": {
       "name": "Mediocrates",
       "avatar": {
-        "src": "http://microblog.com/users/images/Mediocrates.png"
+        "src": "http://microblog.com/users/avatars/Mediocrates.png"
       }
     }
   }]
