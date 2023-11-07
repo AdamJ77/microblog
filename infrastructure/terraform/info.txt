@@ -1,0 +1,2 @@
+Any sensitive .tfvars, .tfstate files should NOT be commited to git repo
+
