@@ -26,9 +26,14 @@ export default function Posts() {
 
   return (
     <div className={styles.posts}>
-      {posts.map((post) => (
-        <Post key={post.id} text={JSON.stringify(post)} />
-      ))}
+      {posts
+        .concat(posts)
+        .concat(posts)
+        .concat(posts)
+        .concat(posts)
+        .map((post, index) => (
+          <Post key={index} text={JSON.stringify(post)} />
+        ))}
     </div>
   );
 }
