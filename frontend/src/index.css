@@ -1,7 +1,8 @@
 :root {
   --primary-color: #ffffff;
-  --secondary-color: #ffffff;
-  --accent-color: #ffffff;
+  --secondary-color: #e8ecf1;
+  --accent-color: #1e9bf1;
+  --seperator-color: #aaaaaa;
 }
 
 * {
@@ -11,6 +12,7 @@
 
 html, body {
   min-height: 100vh;
+  background-color: var(--secondary-color);
 }
 
 body {
