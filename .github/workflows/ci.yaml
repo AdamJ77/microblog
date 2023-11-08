@@ -21,10 +21,12 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r backend/requirements.txt -r backend/requirements.dev.txt
+        run: |
+          pip install -r backend/requirements.txt -r backend/requirements.dev.txt
+          pip install pytest-cov
 
       - name: Run backend tests
-        run: PYTHONPATH=. pytest
+        run: PYTHONPATH=. pytest --cov=. --cov-fail-under=80
 
   build-python-wheel:
     runs-on: ubuntu-latest
