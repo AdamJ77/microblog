@@ -1,5 +1,5 @@
-from entities import Post
-from gateways import PostRepoInterface
+from app.entities import Post
+from app.gateways import PostRepoInterface
 
 
 def add_post_use_case(repo: PostRepoInterface, post: Post):
