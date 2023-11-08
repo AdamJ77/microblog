@@ -1,7 +1,7 @@
 import React from "react";
 import Post from "./Post";
 import styles from "./styles/Posts.module.css";
-import IPost from "../../models/IPost";
+import IPost from "../../../models/IPost";
 
 export default function Posts() {
   const posts: IPost[] = [

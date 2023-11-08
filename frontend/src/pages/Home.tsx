@@ -1,8 +1,7 @@
 import React from "react";
-import Posts from "../components/home/Posts";
-import LeftBar from "../components/home/LeftBar";
-import MainSection from "../components/home/MainSection";
-import RightBar from "../components/home/RightBar";
+import LeftBar from "../components/home/LeftBar/LeftBar";
+import MainSection from "../components/home/Main/MainSection";
+import RightBar from "../components/home/RightBar/RightBar";
 
 export default function Home() {
   return (

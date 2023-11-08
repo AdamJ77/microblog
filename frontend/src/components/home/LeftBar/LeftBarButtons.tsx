@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles/LeftBarButtons.module.css";
 import TweetButton from "./TweetButton";
-import Avatar from "./Avatar";
+import Avatar from "../../common/Avatar";
 
 export default function LeftBarButtons() {
   const getTextColor = (path: string) => {

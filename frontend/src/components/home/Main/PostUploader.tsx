@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Avatar from "./Avatar";
+import Avatar from "../../common/Avatar";
 import styles from "./styles/PostUploader.module.css";
 
 export default function PostUploader() {

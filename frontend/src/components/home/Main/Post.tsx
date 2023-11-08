@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles/Post.module.css";
-import IPost from "../../models/IPost";
-import Avatar from "./Avatar";
+import IPost from "../../../models/IPost";
+import Avatar from "../../common/Avatar";
 
 interface IPostProps {
   post: IPost;
