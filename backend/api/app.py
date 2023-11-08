@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from api.routers import hello
+from backend.api.routers import hello
 
 
 def create_app():
