@@ -1,6 +1,55 @@
 .post {
-  width: 100%;
-  height: 500px;
+  padding: 10px;
+  width: calc(100% - 20px);
   background-color: var(--primary-color);
   margin-bottom: 20px;
+  display: flex;
+  overflow-x: hidden;
+}
+
+.avatar {
+  width: 50px;
+  padding-right: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.article {
+  white-space: pre-wrap;
+}
+
+.file {
+  max-width: 100%;
+}
+
+
+
+
+
+.single {
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.container {
+  padding-top: 1rem;
+  margin: auto;
+  width: 96%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.multiple {
+  width: 50%;
+  border-radius: 1rem;
+}
+
+.image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
