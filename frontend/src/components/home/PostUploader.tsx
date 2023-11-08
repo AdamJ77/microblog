@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import Avatar from "./Avatar";
 import styles from "./styles/PostUploader.module.css";
 
 export default function PostUploader() {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleTextareaChange = () => {
+    if (!textareaRef.current) return;
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height =
+      textareaRef.current.scrollHeight + 10 + "px";
+  };
+
   const me = {
     image:
       "https://upload.wikimedia.org/wikipedia/commons/9/99/Elon_Musk_Colorado_2022_%28cropped2%29.jpg",
@@ -15,7 +24,12 @@ export default function PostUploader() {
         <Avatar image={me.image} alt={me.alt} />
       </div>
       <div className={styles.inputs}>
-        <textarea className={styles.textarea} placeholder="type..."></textarea>
+        <textarea
+          className={styles.textarea}
+          placeholder="type..."
+          ref={textareaRef}
+          onChange={handleTextareaChange}
+        ></textarea>
         <label htmlFor="file-input">
           <input
             type="file"
@@ -29,7 +43,13 @@ export default function PostUploader() {
           />
         </label>
       </div>
-      <button onClick={() => {}} className={styles.button} type="submit">
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+        className={styles.button}
+        type="submit"
+      >
         tweet
       </button>
     </form>

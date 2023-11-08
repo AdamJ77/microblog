@@ -5,9 +5,9 @@ import LeftBarButtons from "./LeftBarButtons";
 
 export default function LeftBar() {
   return (
-    <div className={styles.sidebar}>
+    <section className={styles.sidebar}>
       <Logo />
       <LeftBarButtons />
-    </div>
+    </section>
   );
 }

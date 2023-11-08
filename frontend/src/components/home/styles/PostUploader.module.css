@@ -1,4 +1,11 @@
 .wrapper {
+  position: absolute;
+  top: 60px;
+  max-height: calc(100vh - 50px);
+  width: calc(100% - 10px);
+  z-index: 9999;
+  background-color: var(--primary-color);
+  border-top: 2px solid var(--seperator-color);
   display: flex;
   align-items: center;
   padding: 5px;
