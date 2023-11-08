@@ -2,8 +2,8 @@
 ```json
 {
   "links": {
-    "self": "http://microblog.com/posts?page[number]=0&page[size]=2",
-    "next": "http://microblog.com/posts?page[number]=2&page[size]=5"
+    "self": "http://microblog.com/posts?start=0&count=2",
+    "next": "http://microblog.com/posts?start=2&count=5"
   },
   "data": [{
     "type": "posts",
