@@ -1,8 +1,12 @@
 from app.entities import Post, User
 
 
-def test_post_init(post: Post):
+def test_post_get_text(post: Post):
     assert post.get_text() == 'Bajojajo'
+
+
+def test_post_get_author(post: Post, post_author: User):
+    assert post.get_author() == post_author
 
 
 def test_user_init(user: User):

@@ -12,15 +12,18 @@ def client() -> TestClient:
 
 
 @pytest.fixture
-def post():
-    TEXT = 'Bajojajo'
-    return entities.Post(TEXT)
+def post_author():
+    return entities.User(name='Author')
+
+
+@pytest.fixture
+def post(post_author):
+    return entities.Post(text='Bajojajo', author=post_author)
 
 
 @pytest.fixture
 def user():
-    NAME = 'Maciej'
-    return entities.User(NAME)
+    return entities.User(name='Maciej')
 
 
 @pytest.fixture()
