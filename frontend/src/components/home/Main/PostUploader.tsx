@@ -1,9 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Avatar from "../../common/Avatar";
 import styles from "./styles/PostUploader.module.css";
 
 export default function PostUploader() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
 
   const handleTextareaChange = () => {
     if (!textareaRef.current) return;
@@ -30,12 +31,24 @@ export default function PostUploader() {
           ref={textareaRef}
           onChange={handleTextareaChange}
         ></textarea>
+        <div>
+          {selectedFiles.map((file) => (
+            <img
+              src={URL.createObjectURL(file)}
+              className={styles["uploaded-image"]}
+            />
+          ))}
+        </div>
         <label htmlFor="file-input">
           <input
             type="file"
             id="file-input"
             accept="png, jpg, mp3"
+            multiple
             className={styles.fileInput}
+            onChange={(e) =>
+              setSelectedFiles((prev) => [...prev, ...(e.target.files as any)])
+            }
           />
           <img
             src={`${process.env.PUBLIC_URL}/addImage.svg`}
