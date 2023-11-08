@@ -4,7 +4,7 @@
 
 # Ignore all .tfvars files, which might contain sensitive data, such as
 # password, private keys, and other secrets.
-*.tfvars
+**/*.tfvars
 
 # Ignore the .terraform directory
 **/.terraform/*

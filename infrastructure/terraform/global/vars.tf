@@ -13,3 +13,9 @@ variable "virtual_network_name" {
     type = string
     default = "Microblog-VNet"
 }
+
+variable "component" {
+  type = list(string)
+  default = ["mongo-database"]
+  description = "Database component name"
+}
