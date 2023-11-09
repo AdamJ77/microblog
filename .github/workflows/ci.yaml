@@ -28,7 +28,7 @@ jobs:
       - name: Run backend tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=80
 
-  build-python-wheel:
+  deploy-python-build:
     runs-on: ubuntu-latest
 
     defaults:
@@ -45,12 +45,16 @@ jobs:
         with:
           python-version: '3.10'
 
-      - run: pip install wheel
+      - run: pip install wheel twine
 
-      - name: Build
+      - name: Build from sources
         run: |
           python3.10 setup.py bdist_wheel
           python3.10 setup.py sdist
+
+      - name: Validate build
+        run: |
+          twine check dist/*
 
   run-jest-tests:
     runs-on: ubuntu-latest
