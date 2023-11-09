@@ -8,7 +8,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 export default function App() {
   const suspensify = (Component: ComponentType) => {
     return (
-      <Suspense fallback={<Loading text="App is loading..." />}>
+      <Suspense fallback={<Loading text="" />}>
         <Component />
       </Suspense>
     );
