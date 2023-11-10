@@ -31,6 +31,7 @@ jobs:
   deploy-python-build:
     runs-on: ubuntu-latest
     needs: run-python-tests
+    if: github.ref == 'refs/heads/master'
 
     defaults:
       run:
