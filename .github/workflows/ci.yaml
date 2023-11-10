@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy build
         run: |
-          exit 0
+          twine upload dist/*
 
   run-jest-tests:
     runs-on: ubuntu-latest
