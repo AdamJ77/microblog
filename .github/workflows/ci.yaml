@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - run: pip install wheel twine
+      - run: pip install -U wheel twine setuptools setuptools-scm
 
       - name: Build from sources
         run: |
