@@ -55,7 +55,8 @@ jobs:
 
       - name: Deploy build
         run: |
-          twine upload dist/*
+          twine upload --repository-url $TWINE_REPOSITORY_URL
+ -u $TWINE_USERNAME -p $TWINE_PASSWORD --non-interactive dist/*
 
   run-jest-tests:
     runs-on: ubuntu-latest
