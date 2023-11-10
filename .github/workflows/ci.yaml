@@ -54,8 +54,12 @@ jobs:
           python3.11 setup.py sdist
 
       - name: Deploy build
+        env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TWINE_REPOSITORY_URL: ${{ secrets.PYPI_REPOSITORY_URL }}
         run: |
-          twine upload --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD --non-interactive dist/*
+          twine upload --non-interactive dist/*
 
   run-jest-tests:
     runs-on: ubuntu-latest
