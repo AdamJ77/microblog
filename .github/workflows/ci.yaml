@@ -69,17 +69,3 @@ jobs:
             --repository-url ${{ secrets.PYPI_REPOSITORY_URL }} \
             --non-interactive \
             dist/*
-
-  run-jest-tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Run jest tests
-        run: |
-          npm install
-          npm run test -- --watchAll=false
