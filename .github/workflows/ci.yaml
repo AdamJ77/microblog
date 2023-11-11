@@ -27,6 +27,10 @@ jobs:
         run: |
           pip install -r backend/requirements.txt -r backend/requirements.dev.txt
           pip install pytest-cov
+          pip install flake8
+
+      - name: Run flake8 checks
+        run: flake8 `find backend/ -name *.py`
 
       - name: Run python tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
