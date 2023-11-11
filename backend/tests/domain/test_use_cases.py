@@ -1,6 +1,6 @@
-from app.entities import Post
-from app import use_cases
-from app.gateways import PostRepoInterface
+from domain.entities import Post
+from domain import use_cases
+from domain.gateways import PostRepoInterface
 
 
 def test_add_post_use_case_add_one_post(repo: PostRepoInterface, post: Post):

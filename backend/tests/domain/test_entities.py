@@ -1,4 +1,4 @@
-from app.entities import Post, User
+from domain.entities import Post, User
 
 
 def test_post_get_text(post: Post):

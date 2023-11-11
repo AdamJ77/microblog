@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from app import entities, gateways
+from domain import entities, gateways
 import pytest
 
 

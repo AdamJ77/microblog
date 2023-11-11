@@ -1,5 +1,5 @@
 from abc import ABC
-from app.entities import Post
+from domain.entities import Post
 
 
 class PostRepoInterface(ABC):
