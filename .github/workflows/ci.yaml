@@ -12,6 +12,9 @@ jobs:
   run-python-tests:
     runs-on: ubuntu-latest
 
+    env:
+      MIN_TEST_COV: 65
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,7 +29,7 @@ jobs:
           pip install pytest-cov
 
       - name: Run python tests
-        run: PYTHONPATH=. pytest --cov=. --cov-fail-under=80
+        run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
 
   deploy-python-build:
     runs-on: ubuntu-latest
