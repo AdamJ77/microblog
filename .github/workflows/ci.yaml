@@ -30,7 +30,7 @@ jobs:
           pip install flake8
 
       - name: Run flake8 checks
-        run: flake8 `find backend/ -name *.py`
+        run: flake8 `find backend/ -name *.py` --config .config/.flake8
 
       - name: Run python tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
