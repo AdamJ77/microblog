@@ -25,7 +25,7 @@ jobs:
           pip install -r backend/requirements.txt -r backend/requirements.dev.txt
           pip install pytest-cov
 
-      - name: Run backend tests
+      - name: Run python tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=80
 
   deploy-python-build:
@@ -70,12 +70,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
 
-      - run: npm install
-      - run: |
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-          source ~/.bashrc  # or restart your terminal
-          nvm install 18
-      - run: npm run test
-        working-directory: ./frontend
+      - name: Run jest tests
+        run: |
+          npm install
+          npm run test -- --watchAll=false
