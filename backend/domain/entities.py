@@ -1,13 +1,25 @@
+from datetime import datetime as dt
+
+
 class Post:
-    def __init__(self, text, author) -> None:
+    def __init__(self, text, author, datetime: dt = None) -> None:
         self.text = text
         self.author = author
+        if datetime is None:
+            datetime = dt.today()
+        self.datetime = datetime
 
     def get_text(self):
         return self.text
 
     def get_author(self):
         return self.author
+
+    def get_datetime(self):
+        return self.datetime
+
+    def get_priority(self):
+        return (self.datetime - dt.today()).total_seconds()
 
 
 class User:
