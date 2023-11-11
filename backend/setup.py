@@ -26,7 +26,9 @@ setup(
         "root": ROOT
     },
     setup_requires='setuptools_scm',
-    extras_require={'dev': read_requirements(BACKEND_PATH/'requirements.dev.txt')},
+    extras_require={
+        'dev': read_requirements(BACKEND_PATH/'requirements.dev.txt')
+    },
     entry_points={
         'console_scripts': [
             'microblog-api=api.__main__:main'
