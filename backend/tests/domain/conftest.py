@@ -41,8 +41,8 @@ def user():
 
 
 @pytest.fixture()
-def repo():
-    class FakePostRepo(gateways.PostRepoInterface):
+def post_storage():
+    class FakePostStorage(gateways.PostStorageInterface):
         def __init__(self) -> None:
             self.posts = []
 
@@ -51,7 +51,7 @@ def repo():
 
         def get_any_posts(self, count):
             return self.posts[:count]
-    return FakePostRepo()
+    return FakePostStorage()
 
 
 @pytest.fixture

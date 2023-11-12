@@ -2,7 +2,7 @@ from abc import ABC
 from domain.entities import Post, Timeline
 
 
-class PostRepoInterface(ABC):
+class PostStorageInterface(ABC):
     def add_post(self, post: Post) -> Post:
         pass
 
