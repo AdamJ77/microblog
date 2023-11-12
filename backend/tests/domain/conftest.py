@@ -49,8 +49,8 @@ def repo():
         def add_post(self, post: entities.Post):
             self.posts.append(post)
 
-        def get_all_posts(self):
-            return self.posts
+        def get_any_posts(self, count):
+            return self.posts[:count]
     return FakePostRepo()
 
 

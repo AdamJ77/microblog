@@ -6,7 +6,8 @@ class PostRepoInterface(ABC):
     def add_post(self, post: Post) -> Post:
         pass
 
-    def get_all_posts(self) -> list[Post]:
+    # Should not return the same posts on each call
+    def get_any_posts(self, count) -> list[Post]:
         pass
 
 

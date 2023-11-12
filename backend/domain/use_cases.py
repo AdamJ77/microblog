@@ -12,5 +12,12 @@ def add_post(
     timeline_storage.write(timeline)
 
 
-def get_subset_of_posts(repo: PostRepoInterface, count):
-    return repo.get_all_posts()[:count]
+def get_subset_of_posts(
+        repo: PostRepoInterface,
+        timeline_storage: TimelineStorageInterface,
+        count):
+    timeline_posts = timeline_storage.read().get_all_posts()
+    if len(timeline_posts) >= count:
+        return timeline_posts[:count]
+    repo_posts = repo.get_any_posts(count - len(timeline_posts))
+    return timeline_posts + repo_posts
