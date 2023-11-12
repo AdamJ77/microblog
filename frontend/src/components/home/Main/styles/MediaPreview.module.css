@@ -18,12 +18,12 @@
   border-radius: 1rem;
 }
 
-.image {
+.file {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.image:hover {
+.file:hover {
   cursor: pointer;
 }

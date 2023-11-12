@@ -53,7 +53,7 @@ export default function Posts() {
       media: [
         "https://v.wpimg.pl/YWJmNTVidjYrDzhneRJ7I2hXbD0_S3V1P090dnlYa296FWEyPwU8JS8dIXoxGywnKxo-eiYFdjY6BGEiZ0Y9PjkdIjUvRjw6KAgqezJZa2YuCS9he144Y3lAemJnDHRvK14veW8LaDYoC3thNF88ZWgQ",
         "https://bi.im-g.pl/im/e1/4b/1c/z29670113AMP,Starship.jpg",
-        "https://wf2.xcdn.pl/files/23.bkt/04/20/012062_tldw_midepa10581820_83.jpg.webp",
+        `${process.env.PUBLIC_URL}/videos/test.mp4`,
       ],
       created: new Date(2023, 10, 5, 22, 13, 12),
       author: {

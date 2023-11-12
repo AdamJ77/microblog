@@ -1,6 +1,10 @@
 import React, { useRef, useState } from "react";
 import Avatar from "../../common/Avatar";
 import styles from "./styles/PostUploader.module.css";
+import {
+  AVAILABLE_IMAGE_EXTENSIONS,
+  AVAILABLE_VIDEO_EXTENSIONS,
+} from "../../../constants";
 
 export default function PostUploader() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -11,6 +15,14 @@ export default function PostUploader() {
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height =
       textareaRef.current.scrollHeight + 10 + "px";
+  };
+
+  const prepareAcceptedFiles = () => {
+    const concated = AVAILABLE_IMAGE_EXTENSIONS.concat(
+      AVAILABLE_VIDEO_EXTENSIONS
+    );
+    const formatted = concated.map((ext) => `.${ext}`).join(", ");
+    return formatted;
   };
 
   const me = {
@@ -43,7 +55,7 @@ export default function PostUploader() {
           <input
             type="file"
             id="file-input"
-            accept="png, jpg, mp3"
+            accept={prepareAcceptedFiles()}
             multiple
             className={styles.fileInput}
             onChange={(e) =>
