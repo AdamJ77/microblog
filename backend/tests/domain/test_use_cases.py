@@ -1,6 +1,9 @@
-from domain.entities import Post
-from domain import use_cases
-from domain.gateways import PostStorageInterface, TimelineStorageInterface
+from backend.domain.entities import Post
+from backend.domain import use_cases
+from backend.domain.gateways import (
+    PostStorageInterface,
+    TimelineStorageInterface
+)
 import pytest
 
 

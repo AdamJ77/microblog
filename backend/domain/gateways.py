@@ -1,5 +1,5 @@
 from abc import ABC
-from domain.entities import Post, Timeline
+from backend.domain.entities import Post, Timeline
 
 
 class PostStorageInterface(ABC):

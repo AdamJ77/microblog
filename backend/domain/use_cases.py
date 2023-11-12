@@ -1,5 +1,8 @@
-from domain.entities import Post
-from domain.gateways import PostStorageInterface, TimelineStorageInterface
+from backend.domain.entities import Post
+from backend.domain.gateways import (
+    PostStorageInterface,
+    TimelineStorageInterface
+)
 
 
 def add_post(

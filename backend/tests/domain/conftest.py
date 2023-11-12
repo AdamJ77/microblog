@@ -1,6 +1,6 @@
 import pytest
 import copy
-from domain import entities, gateways
+from backend.domain import entities, gateways
 
 
 @pytest.fixture

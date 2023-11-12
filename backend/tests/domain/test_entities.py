@@ -1,4 +1,4 @@
-from domain.entities import Post, User, Timeline
+from backend.domain.entities import Post, User, Timeline
 from datetime import datetime
 from freezegun import freeze_time
 
