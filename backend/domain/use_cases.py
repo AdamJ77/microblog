@@ -1,12 +1,18 @@
 from domain.entities import Post
-from domain.gateways import PostRepoInterface
+from domain.gateways import PostRepoInterface, TimelineInterface
 
 
-def add_post_use_case(repo: PostRepoInterface, post: Post):
+def add_post_use_case(
+        repo: PostRepoInterface,
+        timeline: TimelineInterface,
+        post: Post):
     repo.add_post(post)
+    timeline.add_post(post)
 
 
-def get_all_posts_use_case(repo: PostRepoInterface):
+def get_all_posts_use_case(
+        repo: PostRepoInterface,
+        timeline: TimelineInterface):
     return repo.get_all_posts()
 
 

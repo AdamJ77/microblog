@@ -1,22 +1,34 @@
 from domain.entities import Post
 from domain import use_cases
-from domain.gateways import PostRepoInterface
+from domain.gateways import PostRepoInterface, TimelineInterface
 
 
-def test_add_post_use_case_add_one_post(repo: PostRepoInterface, post: Post):
+def test_add_post_use_case_add_one_post(
+        repo: PostRepoInterface,
+        timeline: TimelineInterface,
+        post: Post):
     assert len(repo.get_all_posts()) == 0
-    use_cases.add_post_use_case(repo, post)
+    assert len(timeline.get_all_posts()) == 0
+
+    use_cases.add_post_use_case(repo, timeline, post)
+
     assert len(repo.get_all_posts()) == 1
+    assert len(timeline.get_all_posts()) == 1
 
 
-def test_get_all_posts_use_case_no_posts(repo: PostRepoInterface):
-    result = use_cases.get_all_posts_use_case(repo)
+def test_get_all_posts_use_case_no_posts(
+        repo: PostRepoInterface,
+        timeline: TimelineInterface):
+    result = use_cases.get_all_posts_use_case(repo, timeline)
     assert len(result) == 0
 
 
-def test_get_all_posts_use_case_one_post(repo: PostRepoInterface, post):
+def test_get_all_posts_use_case_one_post(
+        repo: PostRepoInterface,
+        timeline: TimelineInterface,
+        post: Post):
     repo.add_post(post)
-    result = use_cases.get_all_posts_use_case(repo)
+    result = use_cases.get_all_posts_use_case(repo, timeline)
     assert len(result) == 1
 
 
