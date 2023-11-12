@@ -1,4 +1,4 @@
-from domain.entities import Post, User
+from domain.entities import Post, User, Timeline
 from datetime import datetime
 from freezegun import freeze_time
 
@@ -38,3 +38,14 @@ def test_post_get_priority_one_hour_timestamp():
 
 def test_user_get_name(user: User):
     assert user.get_name() == 'Maciej'
+
+
+def test_timeline_add_and_get_post(timeline: Timeline, post):
+    timeline.try_add_post(post)
+    assert timeline.get_all_posts() == [post]
+
+
+def test_timeline_add_two_posts_with_capacity_1(timeline: Timeline, post):
+    timeline.try_add_post(post)
+    timeline.try_add_post(post)
+    assert timeline.get_all_posts() == [post]

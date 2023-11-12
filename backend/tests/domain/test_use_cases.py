@@ -3,7 +3,7 @@ from domain import use_cases
 from domain.gateways import PostRepoInterface, TimelineInterface
 
 
-def test_add_post_add_one_post(
+def test_add_post(
         repo: PostRepoInterface,
         timeline: TimelineInterface,
         post: Post):

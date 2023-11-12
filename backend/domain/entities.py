@@ -28,3 +28,17 @@ class User:
 
     def get_name(self):
         return self.name
+
+
+class Timeline:
+    def __init__(self, capacity) -> None:
+        self.posts = []
+        self.capacity = capacity
+
+    def try_add_post(self, post):
+        self.posts.append(post)
+        self.posts.sort(key=lambda post: post.get_priority())
+        del self.posts[self.capacity:]
+
+    def get_all_posts(self):
+        return self.posts
