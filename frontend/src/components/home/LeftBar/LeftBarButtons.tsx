@@ -13,7 +13,7 @@ export default function LeftBarButtons() {
   const buttons = [
     {
       text: "home",
-      image: `${process.env.PUBLIC_URL}/home.svg`,
+      image: `${process.env.PUBLIC_URL}/icons/home.svg`,
       colorClass: getTextColor("/"),
       onclick: () => {},
     },

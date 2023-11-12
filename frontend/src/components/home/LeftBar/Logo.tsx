@@ -4,7 +4,7 @@ import styles from "./styles/Logo.module.css";
 export default function Logo() {
   return (
     <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/584px-Logo_of_Twitter.svg.png"
+      src={`${process.env.PUBLIC_URL}/icons/logo.svg`}
       alt="logo"
       className={styles.logo}
     />
