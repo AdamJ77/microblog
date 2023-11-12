@@ -22,9 +22,9 @@ module "global_setup" {
 # LOCALS
 locals {
   subnet_private_ip_prefixes = "10.0.0.0/26"
-  vm_size                    = "Standard_B2s"
   storage_disk_type          = "Standard_LRS"
   ubuntu_version             = "22_04-lts"
+  ubuntu_version_name        = "jammy"
 }
 
 
@@ -46,6 +46,19 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.mongodb_subnet.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.public_ip[count.index].id
+  }
+}
+
+resource "azurerm_public_ip" "public_ip" {
+  count = var.instances_number
+  name                = "publicIP_${count.index}"
+  resource_group_name = module.global_setup.resource_group_name
+  location            = module.global_setup.resource_group_location
+  allocation_method   = "Static"
+
+  tags = {
+    ComponentType = module.global_setup.component_type[0]
   }
 }
 
@@ -96,7 +109,7 @@ resource "azurerm_linux_virtual_machine" "mongodb_vm" {
   name                  = count.index == 0 ? "mongodb-${var.db_roles[0]}" : "mongodb-${var.db_roles[1]}-${count.index}"
   resource_group_name   = module.global_setup.resource_group_name
   location              = module.global_setup.resource_group_location
-  size                  = local.vm_size
+  size                  = var.vm_size
   admin_username        = var.admin_username
   network_interface_ids = [
     azurerm_network_interface.nic[count.index].id
@@ -114,7 +127,7 @@ resource "azurerm_linux_virtual_machine" "mongodb_vm" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
+    offer     = "0001-com-ubuntu-server-${local.ubuntu_version_name}"
     sku       = local.ubuntu_version
     version   = "latest"
   }
