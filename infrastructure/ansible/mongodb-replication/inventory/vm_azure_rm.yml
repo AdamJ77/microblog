@@ -3,7 +3,7 @@ plugin: azure.azcollection.azure_rm
 auth_source: cli
 
 include_vm_resource_groups:
-  - "{{ lookup('env', 'AZURE_RESOURCE_GROUP') }}"
+  - "{{ lookup('file', '../../ansible_vars.properties') | trim }}"
 
 keyed_groups:
   - prefix: 'mongodb'
