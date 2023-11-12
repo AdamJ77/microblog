@@ -2,7 +2,7 @@ from domain.entities import Post
 from domain.gateways import PostRepoInterface, TimelineInterface
 
 
-def add_post_use_case(
+def add_post(
         repo: PostRepoInterface,
         timeline: TimelineInterface,
         post: Post):
@@ -10,11 +10,11 @@ def add_post_use_case(
     timeline.add_post(post)
 
 
-def get_all_posts_use_case(
+def get_all_posts(
         repo: PostRepoInterface,
         timeline: TimelineInterface):
     return repo.get_all_posts()
 
 
-def get_subset_of_posts_use_case(repo: PostRepoInterface, count):
+def get_subset_of_posts(repo: PostRepoInterface, count):
     return repo.get_all_posts()[:count]
