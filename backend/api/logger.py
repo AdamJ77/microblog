@@ -47,13 +47,14 @@ class LoggingRoute(APIRoute):
 
         async def logging_route_handler(request: Request) -> Response:
             response = await original_route_handler(request)
-            response.background = BackgroundTask(log_response, response, request)
+            response.background = BackgroundTask(
+                log_response, response, request)
             return response
 
         return logging_route_handler
 
 
-def init_logger(log_level = logging.DEBUG, log_path = 'microblog-api.log'):
+def init_logger(log_level=logging.DEBUG, log_path='microblog-api.log'):
     logger = logging.getLogger(__file__)
     logger.setLevel(log_level)
 

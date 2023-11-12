@@ -7,6 +7,8 @@ def test_logger(testdir: Path, caplog, client):
     assert response.status_code == 200
     assert response.json() == {'msg': 'Hello world!'}
 
+    assert len(caplog.records) == 1
+
     logs_path = testdir/'microblog-api.log'
     assert logs_path.exists()
 
