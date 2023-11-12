@@ -6,6 +6,7 @@ import {
   calculateTimeDifference,
   formatTimeDifference,
 } from "./utils/postDate";
+import MediaPreview from "./MediaPreview";
 
 interface IPostProps {
   post: IPost;
@@ -27,22 +28,7 @@ export default function Post({ post }: IPostProps) {
           <span className={styles.date}>{dateText}</span>
         </div>
         <article className={styles.article}>{post.body}</article>
-        <div className={styles.container}>
-          {post.media.map((image, index) => (
-            <a
-              key={index}
-              href={image}
-              target="_blank"
-              className={
-                post.media.length % 2 === 1 && index === post.media.length - 1
-                  ? styles.single
-                  : styles.multiple
-              }
-            >
-              <img src={image} className={styles.image} alt={image} />
-            </a>
-          ))}
-        </div>
+        <MediaPreview media={post.media} />
       </div>
     </div>
   );

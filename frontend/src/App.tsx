@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, ComponentType } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
+import "react-photo-view/dist/react-photo-view.css";
 
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
