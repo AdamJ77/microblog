@@ -1,4 +1,5 @@
 import pytest
+import copy
 from domain import entities, gateways
 
 
@@ -16,6 +17,22 @@ def post(post_author):
         text='Bajojajo',
         author=post_author,
         datetime=post_date)
+
+
+@pytest.fixture
+def posts(post_author):
+    from datetime import datetime
+
+    return {
+        'low priority': entities.Post(
+            text='low',
+            author=post_author,
+            datetime=datetime.fromtimestamp(0)),
+        'high priority': entities.Post(
+            text='high',
+            author=post_author,
+            datetime=datetime.fromtimestamp(999999))
+    }
 
 
 @pytest.fixture
@@ -40,3 +57,18 @@ def repo():
 @pytest.fixture
 def timeline():
     return entities.Timeline(capacity=1)
+
+
+@pytest.fixture
+def timeline_storage(timeline):
+    class FakeTimelineStorage(gateways.TimelineStorageInterface):
+        def __init__(self) -> None:
+            self.timeline = timeline
+
+        def read(self) -> entities.Timeline:
+            return copy.deepcopy(self.timeline)
+
+        def write(self, timeline: entities.Timeline):
+            self.timeline = copy.deepcopy(timeline)
+
+    return FakeTimelineStorage()

@@ -1,19 +1,15 @@
-from domain.entities import Post, Timeline
-from domain.gateways import PostRepoInterface
+from domain.entities import Post
+from domain.gateways import PostRepoInterface, TimelineStorageInterface
 
 
 def add_post(
         repo: PostRepoInterface,
-        timeline: Timeline,
+        timeline_storage: TimelineStorageInterface,
         post: Post):
     repo.add_post(post)
+    timeline = timeline_storage.read()
     timeline.try_add_post(post)
-
-
-def get_all_posts(
-        repo: PostRepoInterface,
-        timeline: Timeline):
-    return repo.get_all_posts()
+    timeline_storage.write(timeline)
 
 
 def get_subset_of_posts(repo: PostRepoInterface, count):

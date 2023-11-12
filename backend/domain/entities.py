@@ -37,7 +37,7 @@ class Timeline:
 
     def try_add_post(self, post):
         self.posts.append(post)
-        self.posts.sort(key=lambda post: post.get_priority())
+        self.posts.sort(key=lambda post: -post.get_priority())
         del self.posts[self.capacity:]
 
     def get_all_posts(self):

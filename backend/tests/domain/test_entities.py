@@ -45,7 +45,9 @@ def test_timeline_add_and_get_post(timeline: Timeline, post):
     assert timeline.get_all_posts() == [post]
 
 
-def test_timeline_add_two_posts_with_capacity_1(timeline: Timeline, post):
-    timeline.try_add_post(post)
-    timeline.try_add_post(post)
-    assert timeline.get_all_posts() == [post]
+def test_timeline_overflow(timeline: Timeline, posts):
+    timeline.try_add_post(posts['low priority'])
+    assert timeline.get_all_posts() == [posts['low priority']]
+
+    timeline.try_add_post(posts['high priority'])
+    assert timeline.get_all_posts() == [posts['high priority']]
