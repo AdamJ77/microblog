@@ -21,13 +21,8 @@ export function calculateTimeDifference(
   const days = Math.floor(hours / 24);
   const weeks = Math.floor(days / 7);
 
-  const recentMonth = recentDate.getMonth() + 1;
-  const olderMonth = olderDate.getMonth() + 1;
-  const recentYear = recentDate.getFullYear();
-  const olderYear = olderDate.getFullYear();
-
-  const months = (recentYear - olderYear) * 12 + (recentMonth - olderMonth);
-  const years = Math.floor(months / 12);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
 
   return {
     milliseconds: timeDifference,
@@ -65,10 +60,7 @@ export function formatTimeDifference(timeDifference: IDateDifference): string {
   } else if (timeDifference.minutes > 0) {
     return timeDifference.minutes < 3
       ? "just now"
-      : timeDifference.minutes === 1
-      ? "1 minute ago"
       : `${timeDifference.minutes} minutes ago`;
-  } else {
-    return "just now";
   }
+  return "just now";
 }

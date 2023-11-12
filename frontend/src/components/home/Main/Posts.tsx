@@ -55,7 +55,7 @@ export default function Posts() {
         "https://bi.im-g.pl/im/e1/4b/1c/z29670113AMP,Starship.jpg",
         `${process.env.PUBLIC_URL}/videos/test.mp4`,
       ],
-      created: new Date(2023, 10, 5, 22, 13, 12),
+      created: new Date(2023, 9, 29, 22, 13, 12),
       author: {
         id: 1,
         name: "Elon Musk",
