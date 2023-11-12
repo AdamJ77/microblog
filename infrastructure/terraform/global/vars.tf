@@ -1,11 +1,11 @@
 variable resource_group_name {
     type = string
-    default = "Microblog"
+    default = "Microblog1"
 }
 
 variable location {
     type = string
-    default = "westeurope"
+    default = "eastus2"
     description = "The Azure location to deploy resources in"
 }
 

@@ -27,6 +27,12 @@ variable "http_port" {
   description = "Port number for HTTP traffic"
 }
 
+variable "vm_size" {
+  type = string
+  default = "Standard_B1s"
+  description = "The size that you choose then determines factors such as processing power, memory, and storage capacity."
+}
+
 variable "source_address_prefix" {
   type = string
   description = "Source IP address allowed to make ssh connections"
