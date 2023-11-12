@@ -8,3 +8,8 @@ def client() -> TestClient:
 
     app = create_app()
     return TestClient(app)
+
+@pytest.fixture(autouse=True)
+def testdir(monkeypatch, tmpdir):
+    monkeypatch.chdir(tmpdir)
+    return tmpdir
