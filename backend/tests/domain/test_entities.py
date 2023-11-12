@@ -40,6 +40,13 @@ def test_user_get_name(user: User):
     assert user.get_name() == 'Maciej'
 
 
+def test_timeline_init_posts(timeline: Timeline, posts: dict):
+    post_list = list(posts.values())
+    timeline.init_posts(post_list)
+
+    assert len(timeline.get_all_posts()) == 1
+
+
 def test_timeline_add_and_get_post(timeline: Timeline, post):
     timeline.try_add_post(post)
     assert timeline.get_all_posts() == [post]
@@ -51,3 +58,12 @@ def test_timeline_overflow(timeline: Timeline, posts):
 
     timeline.try_add_post(posts['high priority'])
     assert timeline.get_all_posts() == [posts['high priority']]
+
+
+def test_timeline_truncate(timeline: Timeline, posts):
+    post_list = list(posts.values())
+    timeline.posts = post_list
+    assert len(timeline.get_all_posts()) == 2
+
+    timeline._truncate()
+    assert len(timeline.get_all_posts()) == 1

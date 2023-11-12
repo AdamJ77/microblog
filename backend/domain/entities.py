@@ -35,8 +35,15 @@ class Timeline:
         self.posts = []
         self.capacity = capacity
 
+    def init_posts(self, posts: list[Post]):
+        self.posts.extend(posts)
+        self._truncate()
+
     def try_add_post(self, post):
         self.posts.append(post)
+        self._truncate()
+
+    def _truncate(self):
         self.posts.sort(key=lambda post: -post.get_priority())
         del self.posts[self.capacity:]
 
