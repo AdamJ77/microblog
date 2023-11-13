@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 import pytest
 
@@ -8,3 +10,10 @@ def client() -> TestClient:
 
     app = create_app()
     return TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def testdir(monkeypatch, tmpdir) -> Path:
+    print(tmpdir)
+    monkeypatch.chdir(tmpdir)
+    return tmpdir
