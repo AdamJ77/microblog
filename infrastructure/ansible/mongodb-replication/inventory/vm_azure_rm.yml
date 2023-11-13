@@ -3,7 +3,7 @@ plugin: azure.azcollection.azure_rm
 auth_source: cli
 
 include_vm_resource_groups:
-  - "{{ lookup('file', '../../ansible_vars.properties') | trim }}"
+  - Microblog1
 
 keyed_groups:
   - prefix: 'mongodb'
@@ -12,6 +12,3 @@ keyed_groups:
   - prefix: ''
     key: tags.ComponentType
     separator: ""
-  
-
-
