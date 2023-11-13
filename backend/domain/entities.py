@@ -1,6 +1,15 @@
 from datetime import datetime as dt
 
 
+class User:
+    def __init__(self, name) -> None:
+        self.__name = name
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+
 class Post:
     def __init__(self, text, author, datetime: dt = None) -> None:
         self.__text = text
@@ -10,29 +19,20 @@ class Post:
         self.__datetime = datetime
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.__text
 
     @property
-    def author(self):
+    def author(self) -> User:
         return self.__author
 
     @property
-    def datetime(self):
+    def datetime(self) -> dt:
         return self.__datetime
 
     @property
-    def priority(self):
+    def priority(self) -> float:
         return (self.datetime - dt.today()).total_seconds()
-
-
-class User:
-    def __init__(self, name) -> None:
-        self.__name = name
-
-    @property
-    def name(self):
-        return self.__name
 
 
 class Timeline:
@@ -53,5 +53,5 @@ class Timeline:
         del self.__posts[self.__capacity:]
 
     @property
-    def posts(self):
+    def posts(self) -> list[Post]:
         return self.__posts
