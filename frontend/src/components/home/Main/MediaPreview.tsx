@@ -3,6 +3,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import styles from "./styles/MediaPreview.module.css";
 import MediaPreviewToolbar from "./MediaPreviewToolbar";
 import { AVAILABLE_VIDEO_EXTENSIONS } from "../../../constants";
+import { getMediaStyles } from "./utils/mediaStyles";
 
 interface IMediaPreview {
   media: string[];
@@ -44,6 +45,7 @@ export default function MediaPreview({ media }: IMediaPreview) {
                 loop
                 autoPlay
                 muted
+                style={getMediaStyles(index, media.length)}
                 className={styles.file}
               >
                 Your browser doesn't support videos
@@ -53,6 +55,7 @@ export default function MediaPreview({ media }: IMediaPreview) {
                 <img
                   src={file}
                   alt={file}
+                  style={getMediaStyles(index, media.length)}
                   className={styles.file}
                   title="preview"
                 />

@@ -9,8 +9,10 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  box-shadow: 0px 10px 5px rgb(126, 126, 126);
+  box-shadow: 0px 10px 10px rgb(126, 126, 126, 0.6);
   border-bottom: 2px solid var(--seperator-color);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .inputs {
@@ -25,6 +27,7 @@
   outline: none;
   resize: vertical;
   font-size: large;
+  background-color: var(--primary-color);
 }
 
 .avatar {
@@ -49,7 +52,7 @@
 
 .button:hover {
   cursor: pointer;
-  background-color: #0f89da;
+  background-color: #24656e;
 }
 
 .fileInput {

@@ -1,6 +1,5 @@
 .sidebar {
-  width: 25%;
-  border-right: 2px solid var(--seperator-color);
+  width: 20%;
   background-color: var(--primary-color);
   min-height: 100vh;
 }

@@ -10,7 +10,7 @@ export default function Loading({ text }: ILoadingProps) {
   return (
     <div className={styles.loading}>
       <div className={styles.logo}>
-        <PulseLoader color="#1e9bf1" />
+        <PulseLoader color="#1d5159" />
       </div>
       <h2 className={styles.text}>{text}</h2>
     </div>
