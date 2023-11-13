@@ -1,4 +1,4 @@
-from datetime import datetime as dt
+from datetime import datetime
 
 
 class User:
@@ -11,11 +11,11 @@ class User:
 
 
 class Post:
-    def __init__(self, text, author, datetime: dt = None) -> None:
+    def __init__(self, text, author, datetime: datetime = None) -> None:
         self.__text = text
         self.__author = author
         if datetime is None:
-            datetime = dt.today()
+            datetime = datetime.today()
         self.__datetime = datetime
 
     @property
@@ -27,12 +27,12 @@ class Post:
         return self.__author
 
     @property
-    def datetime(self) -> dt:
+    def datetime(self) -> datetime:
         return self.__datetime
 
     @property
     def priority(self) -> float:
-        return (self.datetime - dt.today()).total_seconds()
+        return (self.datetime - datetime.today()).total_seconds()
 
 
 class Timeline:
