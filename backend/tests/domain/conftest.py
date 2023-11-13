@@ -16,7 +16,7 @@ def post(post_author):
     return entities.Post(
         text='Bajojajo',
         author=post_author,
-        datetime=post_date)
+        date=post_date)
 
 
 @pytest.fixture
@@ -27,11 +27,11 @@ def posts(post_author):
         'low priority': entities.Post(
             text='low',
             author=post_author,
-            datetime=datetime.fromtimestamp(0)),
+            date=datetime.fromtimestamp(0)),
         'high priority': entities.Post(
             text='high',
             author=post_author,
-            datetime=datetime.fromtimestamp(999999))
+            date=datetime.fromtimestamp(999999))
     }
 
 
