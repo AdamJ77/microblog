@@ -1,3 +1,4 @@
+import time
 from typing import Callable
 import logging
 import ecs_logging
@@ -10,7 +11,7 @@ from starlette.background import BackgroundTask
 log = logging.getLogger(__file__)
 
 
-def log_response(res: Response, req: Request):
+def log_response(res: Response, req: Request, start_time: float):
     port_frmtd = f':{req.client.port}' if req.client.port else ''
     url = str(req.url)
     log.info(
@@ -36,6 +37,7 @@ def log_response(res: Response, req: Request):
                 'headers': res.headers,
                 'charset': res.charset,
                 'media_type': res.media_type,
+                'duration': time.time() - start_time,
             }
         }
     )
@@ -48,7 +50,7 @@ class LoggingRoute(APIRoute):
         async def logging_route_handler(request: Request) -> Response:
             response = await original_route_handler(request)
             response.background = BackgroundTask(
-                log_response, response, request)
+                log_response, response, request, time.time())
             return response
 
         return logging_route_handler

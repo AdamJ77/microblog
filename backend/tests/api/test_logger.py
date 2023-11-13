@@ -31,5 +31,6 @@ def test_logger(testdir: Path, caplog, client):
     assert response['charset'] == 'utf-8'
     assert response['media_type'] == 'application/json'
     assert response['status_code'] == 200
+    assert response['duration'] > 0
     parsed_body = json.loads(response['body'][2:-1].encode())
     assert parsed_body == {'msg': 'Hello world!'}
