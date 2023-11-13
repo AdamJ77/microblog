@@ -3,49 +3,55 @@ from datetime import datetime as dt
 
 class Post:
     def __init__(self, text, author, datetime: dt = None) -> None:
-        self.text = text
-        self.author = author
+        self.__text = text
+        self.__author = author
         if datetime is None:
             datetime = dt.today()
-        self.datetime = datetime
+        self.__datetime = datetime
 
-    def get_text(self):
-        return self.text
+    @property
+    def text(self):
+        return self.__text
 
-    def get_author(self):
-        return self.author
+    @property
+    def author(self):
+        return self.__author
 
-    def get_datetime(self):
-        return self.datetime
+    @property
+    def datetime(self):
+        return self.__datetime
 
-    def get_priority(self):
+    @property
+    def priority(self):
         return (self.datetime - dt.today()).total_seconds()
 
 
 class User:
     def __init__(self, name) -> None:
-        self.name = name
+        self.__name = name
 
-    def get_name(self):
-        return self.name
+    @property
+    def name(self):
+        return self.__name
 
 
 class Timeline:
     def __init__(self, capacity) -> None:
-        self.posts = []
-        self.capacity = capacity
+        self.__posts = []
+        self.__capacity = capacity
 
     def init_posts(self, posts: list[Post]):
-        self.posts.extend(posts)
-        self._truncate()
+        self.__posts.extend(posts)
+        self.__truncate()
 
     def try_add_post(self, post):
-        self.posts.append(post)
-        self._truncate()
+        self.__posts.append(post)
+        self.__truncate()
 
-    def _truncate(self):
-        self.posts.sort(key=lambda post: -post.get_priority())
-        del self.posts[self.capacity:]
+    def __truncate(self):
+        self.__posts.sort(key=lambda post: -post.priority)
+        del self.__posts[self.__capacity:]
 
-    def get_all_posts(self):
-        return self.posts
+    @property
+    def posts(self):
+        return self.__posts

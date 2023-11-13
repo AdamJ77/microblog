@@ -19,7 +19,7 @@ def get_subset_of_posts(
         post_storage: PostStorageInterface,
         timeline_storage: TimelineStorageInterface,
         count):
-    timeline_posts = timeline_storage.read().get_all_posts()
+    timeline_posts = timeline_storage.read().posts
     if len(timeline_posts) >= count:
         return timeline_posts[:count]
 

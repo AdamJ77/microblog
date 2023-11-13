@@ -12,12 +12,12 @@ def test_add_post(
         timeline_storage: TimelineStorageInterface,
         post: Post):
     assert len(post_storage.get_any_posts(10)) == 0
-    assert len(timeline_storage.read().get_all_posts()) == 0
+    assert len(timeline_storage.read().posts) == 0
 
     use_cases.add_post(post_storage, timeline_storage, post)
 
     assert len(post_storage.get_any_posts(10)) == 1
-    assert len(timeline_storage.read().get_all_posts()) == 1
+    assert len(timeline_storage.read().posts) == 1
 
 
 def test_get_subset_of_posts_no_posts(
