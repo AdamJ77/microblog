@@ -11,12 +11,10 @@ class User:
 
 
 class Post:
-    def __init__(self, text, author, datetime: datetime = None) -> None:
+    def __init__(self, text, author, date: datetime = None) -> None:
         self.__text = text
         self.__author = author
-        if datetime is None:
-            datetime = datetime.today()
-        self.__datetime = datetime
+        self.__datetime = date or datetime.today()
 
     @property
     def text(self) -> str:
