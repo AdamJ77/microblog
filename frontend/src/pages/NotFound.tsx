@@ -1,21 +1,16 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { CSSProperties } from "react";
+import NotFoundInfo from "../components/notFound/NotFoundInfo";
 
 export default function NotFound() {
-  const navigate = useNavigate();
+  const wraperStyles: CSSProperties = {
+    backgroundColor: "var(--primary-color)",
+    width: "100%",
+    height: "100vh",
+  };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        textAlign: "center",
-      }}
-    >
-      <div>Requested resource doesn't exist!</div>
-      <button onClick={() => navigate("/")}>Bring me back to home.</button>
+    <div style={wraperStyles}>
+      <NotFoundInfo />
     </div>
   );
 }

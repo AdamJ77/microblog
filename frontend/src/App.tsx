@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, ComponentType } from "react";
+import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 import "react-photo-view/dist/react-photo-view.css";
@@ -8,8 +8,20 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 export default function App() {
   const suspensify = (Component: ComponentType) => {
+    const suspenseStyles: CSSProperties = {
+      width: "100%",
+      height: "100vh",
+      backgroundColor: "var(--primary-color)",
+    };
+
     return (
-      <Suspense fallback={<Loading text="" />}>
+      <Suspense
+        fallback={
+          <div style={suspenseStyles}>
+            <Loading text="" />
+          </div>
+        }
+      >
         <Component />
       </Suspense>
     );
