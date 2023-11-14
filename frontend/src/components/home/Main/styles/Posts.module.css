@@ -1,6 +1,7 @@
 .posts {
-  padding-top: 100px;
-  height: calc(100vh - 70px);
+  padding-top: 90px;
+  padding-bottom: 20px;
+  height: calc(100vh - 180px);
   background-color: var(--secondary-color);
   overflow-y: scroll;
   scrollbar-width: none;

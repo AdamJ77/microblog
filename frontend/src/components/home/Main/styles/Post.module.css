@@ -1,9 +1,9 @@
 .post {
   padding: 10px;
-  width: calc(96% - 20px);
-  margin-left: 2%;
+  width: calc(90% - 20px);
+  margin: auto;
   background-color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
   overflow-x: hidden;
   border-radius: 10px;
