@@ -68,7 +68,15 @@
   cursor: pointer;
 }
 
-.uploaded-image {
+.uploaded-file-btn {
+  all: unset;
+}
+
+.uploaded-file-btn:hover {
+  cursor: pointer;
+}
+
+.uploaded-file {
   height: 50px;
   width: 50px;
   object-fit: cover;

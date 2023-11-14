@@ -25,6 +25,14 @@ export default function PostUploader() {
     return formatted;
   };
 
+  const isImage = (file: File) => {
+    return file.type.startsWith("image/");
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((files) => files.filter((_, id) => id !== index));
+  };
+
   const me = {
     image:
       "https://upload.wikimedia.org/wikipedia/commons/9/99/Elon_Musk_Colorado_2022_%28cropped2%29.jpg",
@@ -44,11 +52,32 @@ export default function PostUploader() {
           onChange={handleTextareaChange}
         ></textarea>
         <div>
-          {selectedFiles.map((file) => (
-            <img
-              src={URL.createObjectURL(file)}
-              className={styles["uploaded-image"]}
-            />
+          {selectedFiles.map((file, index) => (
+            <button
+              title="remove"
+              className={styles["uploaded-file-btn"]}
+              onClick={(e) => {
+                e.preventDefault();
+                removeFile(index);
+              }}
+            >
+              {isImage(file) ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  className={styles["uploaded-file"]}
+                />
+              ) : (
+                <video
+                  src={URL.createObjectURL(file)}
+                  className={styles["uploaded-file"]}
+                  autoPlay
+                  muted
+                  loop
+                >
+                  Your browser doesn't support videos
+                </video>
+              )}
+            </button>
           ))}
         </div>
         <label htmlFor="file-input">
