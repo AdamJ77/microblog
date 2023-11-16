@@ -72,3 +72,25 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
   }]
 }
 ```
+
+### API request prototype for adding a post
+```json
+{
+  "data": {
+    "type": "posts",
+    "attributes": {
+      "body": "Bajojajo",
+      "media": [
+        "<Some link to uploaded image>",
+        "<Some link to uploaded image>",
+        "<Some link to uploaded image>"
+      ]
+    },
+    "relationships": {
+      "author": {
+        "data": { "type": "users", "id": "213" }
+      }
+    }
+  }
+}
+```
