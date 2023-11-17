@@ -16,11 +16,11 @@ export default function MediaPreviewToolbar({
   const toolbarButtons = [
     {
       onclick: () => onScale(scale + 1),
-      image: `${process.env.PUBLIC_URL}/icons/zoomIn.svg`,
+      image: `${process.env.PUBLIC_URL}/icons/zoom_in.svg`,
     },
     {
       onclick: () => onScale(scale - 1),
-      image: `${process.env.PUBLIC_URL}/icons/zoomOut.svg`,
+      image: `${process.env.PUBLIC_URL}/icons/zoom_out.svg`,
     },
     {
       onclick: () => onRotate(rotate + 90),

@@ -92,7 +92,7 @@ export default function PostUploader() {
             }
           />
           <img
-            src={`${process.env.PUBLIC_URL}/icons/addImage.svg`}
+            src={`${process.env.PUBLIC_URL}/icons/add_image.svg`}
             className={styles.fileInputImage}
           />
         </label>
