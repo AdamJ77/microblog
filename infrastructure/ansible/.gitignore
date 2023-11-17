@@ -1,0 +1,8 @@
+# Ignore sensitive config file variables
+**/*sensitive.cfg
+
+# Ignore vars file from Terraform
+ansible_vars.properties
+
+# Ignore Ansible config file
+ansible.cfg

@@ -1,0 +1,4 @@
+Folder for mongodb replica set database module
+
+GENERATE PLAN WITH:
+terraform plan -var-file="secrets.tfvars"

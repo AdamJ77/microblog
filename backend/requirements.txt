@@ -1,0 +1,6 @@
+fastapi
+pydantic
+uvicorn
+setuptools-scm
+httpx
+ecs-logging
