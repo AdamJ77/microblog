@@ -1,0 +1,34 @@
+.post {
+  padding: 10px;
+  width: calc(90% - 20px);
+  margin: auto;
+  background-color: var(--primary-color);
+  margin-top: 20px;
+  display: flex;
+  overflow-x: hidden;
+  border-radius: 10px;
+}
+
+.avatar {
+  width: 50px;
+  padding-right: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.article {
+  white-space: pre-wrap;
+}
+
+.file {
+  max-width: 100%;
+}
+
+.date {
+  color: rgb(109, 109, 109);
+  font-size: large;
+  font-weight: 500;
+}

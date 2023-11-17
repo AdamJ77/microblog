@@ -1,0 +1,19 @@
+.wrapper {
+  height: 50px;
+  padding-top: 10px;
+  width: 100%;
+  border-bottom: 1px solid var(--seperator-color);
+  box-shadow: 0px 10px 15px rgb(126, 126, 126, 0.7);
+}
+
+.search {
+  width: calc(90% - 10px);
+  outline: none;
+  border: none;
+  height: 60%;
+  font-size: large;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-left: 5%;
+  background-color: var(--secondary-color);
+}

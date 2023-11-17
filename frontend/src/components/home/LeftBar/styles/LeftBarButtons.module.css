@@ -1,0 +1,39 @@
+.buttons {
+  width: 60%;
+  margin-left: 20%;
+}
+
+.button {
+  all: unset;
+  transition: background-color 200ms ease;
+  width: 100%;
+  margin-bottom: 20px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: var(--secondary-color);
+}
+
+.button span {
+  width: 50%;
+  text-align: center;
+  font-weight: 600;
+  font-size: large;
+}
+
+.button img {
+  margin-left: 5px;
+}
+
+.selected {
+  color: var(--accent-color);
+}
+
+.unselected {
+  color: black;
+}

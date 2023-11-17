@@ -1,0 +1,29 @@
+
+.single {
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.container {
+  padding-top: 1rem;
+  margin: auto;
+  width: 96%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.multiple {
+  width: 50%;
+  border-radius: 1rem;
+}
+
+.file {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.file:hover {
+  cursor: pointer;
+}
