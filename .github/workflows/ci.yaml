@@ -35,6 +35,17 @@ jobs:
       - name: Run python tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
 
+  build-docker-image:
+    runs-on: ubuntu-latest
+    needs: run-python-tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build
+        run: docker build -t microblog-backend backend/
+
+
   deploy-python-build:
     runs-on: ubuntu-latest
     environment: production
