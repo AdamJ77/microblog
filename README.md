@@ -85,11 +85,6 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
         "<Some link to uploaded image>",
         "<Some link to uploaded image>"
       ]
-    },
-    "relationships": {
-      "author": {
-        "data": { "type": "users", "id": "213" }
-      }
     }
   }
 }
