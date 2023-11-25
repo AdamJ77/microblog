@@ -1,1 +1,7 @@
-Folder for dev environment
+Folder for dev environment.
+
+To initalize remote backend use config file:
+terraform init -backend-config=backend.conf
+
+To update the state file to match current real-world resources:
+terraform refresh
