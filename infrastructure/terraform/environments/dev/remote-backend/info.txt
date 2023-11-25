@@ -1,0 +1,1 @@
+Folder for remote backend for dev environment in Azure Storage Account
