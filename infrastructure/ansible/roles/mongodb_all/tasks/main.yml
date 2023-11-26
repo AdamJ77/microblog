@@ -1,0 +1,58 @@
+---
+- block:
+  - name: Install necessary packages
+    ansible.builtin.apt:
+      name:
+        - gnupg
+        - curl
+      state: present
+
+  - name: Import MongoDB public GPG key
+    ansible.builtin.apt_key:
+      url: "{{ mongodb_apt_key_url }}"
+      keyring: "{{ mongodb_apt_key_file }}"
+
+  - name: Create list file for MongoDB
+    ansible.builtin.lineinfile:
+      path: "{{ mongodb_repo_list_file }}"
+      line: "{{ mongodb_repo_line }}"
+      create: true
+      mode: '0644'
+
+  - name: Update APT Cache
+    ansible.builtin.apt:
+      update_cache: true
+
+  - name: Install MongoDB
+    ansible.builtin.apt:
+      name: mongodb-org
+      state: present
+
+  - name: Install MongoDB Shell
+    ansible.builtin.apt:
+      name: mongodb-mongosh
+      state: present
+
+  - name: Modify bindIp in /etc/mongod.conf
+    ansible.builtin.lineinfile:
+      path: /etc/mongod.conf
+      regexp: '^\s*bindIp:.*$'
+      line: "  bindIp: 127.0.0.1,{{ ansible_hostname }}"
+      backrefs: true
+
+  - name: Add replication configuration to /etc/mongod.conf
+    ansible.builtin.blockinfile:
+      path: /etc/mongod.conf
+      block: |
+        replication:
+          replSetName: {{ repl_set_name }}
+      marker: "# {mark} ANSIBLE MANAGED BLOCK"
+      insertafter: EOF
+
+  - name: Ensure MongoDB is started
+    ansible.builtin.service:
+      name: mongod
+      state: restarted
+      enabled: true
+
+  become: true

@@ -1,0 +1,32 @@
+---
+- name: Initialize an empty list for hostnames
+  ansible.builtin.set_fact:
+    secondary_hostnames: []
+
+- name: Gather secondary hostnames command outputs from all hosts
+  ansible.builtin.set_fact:
+    secondary_hostnames: "{{ secondary_hostnames + [hostvars[host].ansible_hostname] }}"
+  loop: "{{ groups['secondary'] }}"
+  loop_control:
+    loop_var: host
+
+- name: Print the hostnames fact
+  ansible.builtin.debug:
+    var: secondary_hostnames
+
+- name: Print the hostnames fact
+  ansible.builtin.debug:
+    msg: "{{ repl_set_name }}"
+
+- name: Initialize replica set on primary instance
+  ansible.builtin.shell: |
+    mongosh --host {{ ansible_hostname }}:{{ mongodb_port }} \
+      --eval 'rs.initiate({_id: "{{ repl_set_name }}", members: [{_id: 0, host: "{{ ansible_hostname }}:{{ mongodb_port }}"}]})'
+  changed_when: false
+
+- name: Add secondary instances to replica set
+  ansible.builtin.shell: |
+    mongosh --host {{ ansible_hostname }}:{{ mongodb_port }} \
+      --eval 'rs.add("{{ item }}:{{ mongodb_port }}")'
+  loop: "{{ secondary_hostnames }}"
+  changed_when: false
