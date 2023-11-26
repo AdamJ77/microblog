@@ -1,0 +1,2 @@
+mongodb_port: 27017
+repl_set_name: myReplSet
