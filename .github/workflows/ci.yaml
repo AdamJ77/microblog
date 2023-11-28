@@ -35,15 +35,30 @@ jobs:
       - name: Run python tests
         run: PYTHONPATH=. pytest --cov=. --cov-fail-under=$MIN_TEST_COV
 
-  build-docker-image:
+  deploy-docker-image:
     runs-on: ubuntu-latest
+    environment: production
     needs: run-python-tests
+    # if: github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v4
 
       - name: build
         run: docker build -t microblog-backend backend/
+
+      - name: tag
+        run: |
+          docker tag \
+            microblog-backend \
+            ${{ secrets.DOCKERHUB_LOGIN }}/microblog-backend:0.${{ github.run_number }} \
+            .
+    
+      - name: push to docker hub
+        run: |
+          docker push \
+            ${{ secrets.DOCKERHUB_LOGIN }}/microblog-backend:0.${{ github.run_number }}
+
 
 
   deploy-python-build:
