@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: run-python-tests
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v4
