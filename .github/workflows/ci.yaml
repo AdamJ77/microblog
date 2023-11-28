@@ -51,8 +51,7 @@ jobs:
         run: |
           docker tag \
             microblog-backend \
-            ${{ secrets.DOCKERHUB_LOGIN }}/microblog-backend:0.${{ github.run_number }} \
-            .
+            ${{ secrets.DOCKERHUB_LOGIN }}/microblog-backend:0.${{ github.run_number }}
     
       - name: push to docker hub
         run: |
