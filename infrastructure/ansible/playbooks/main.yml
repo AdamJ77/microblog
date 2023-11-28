@@ -1,0 +1,4 @@
+---
+# file: playbooks/main.yml
+- ansible.builtin.import_playbook: playbooks/setup_mongodb.yml
+  

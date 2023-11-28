@@ -1,0 +1,2 @@
+1. contains YAML files that reference groups of devices or all devices
+2. names of the YAML files in group_vars must match the group defined in the inventory

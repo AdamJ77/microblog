@@ -1,9 +1,3 @@
-variable "admin_username" {
-    type = string
-    sensitive = true
-    description = "The username for Azure VM admin"
-}
-
 variable "db_roles" {
   type        = list(string)
   default     = ["primary", "secondary"]  # Optional: provide a default value
@@ -33,6 +27,19 @@ variable "vm_size" {
   description = "The size that you choose then determines factors such as processing power, memory, and storage capacity."
 }
 
+variable "nsg_name" {
+  type = string
+  default = "mongodb-nsg"
+  description = "Name for Network Security Group"
+}
+
+# DECLARED
+variable "admin_username" {
+    type = string
+    description = "The username for Azure VM admin"
+    sensitive = true
+}
+
 variable "source_address_prefix" {
   type = string
   description = "Source IP address allowed to make ssh connections"
@@ -40,7 +47,7 @@ variable "source_address_prefix" {
 }
 
 variable "ssh_public_key_path" {
-  description = "Path to the SSH public key"
   type        = string
+  description = "Path to the SSH public key"
   sensitive = true
 }

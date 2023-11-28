@@ -1,0 +1,6 @@
+---
+- name: Set read preference
+  ansible.builtin.shell: |
+    mongosh --host {{ ansible_hostname }}:{{ mongodb_port }} \
+      --eval 'db.getMongo().setReadPref("{{ repl_set_read_preference_mode }}")'
+  changed_when: false

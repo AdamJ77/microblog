@@ -1,6 +1,7 @@
 ---
-- name: Install MongoDB 7.0
-  hosts: mongo-database
+
+- name: Test replication
+  hosts: mongo_database
   become: true
   tasks:
     - name: Copy insert script to primary MongoDB server
@@ -8,27 +9,27 @@
         src: ../scripts/insert_documents.sh
         dest: /tmp/insert_documents.sh
         mode: '0755'
-      when: "'mongodb-primary' in inventory_hostname"
+      when: "'primary' in group_names"
 
     - name: Copy check script to secondary MongoDB server
       ansible.builtin.copy:
         src: ../scripts/check_replication.sh
         dest: /tmp/check_replication.sh
         mode: '0755'
-      when: "'mongodb-secondary' in inventory_hostname"
+      when: "'secondary' in group_names"
 
     - name: Execute insert script on primary MongoDB server
       ansible.builtin.command: /tmp/insert_documents.sh
-      when: "'mongodb-primary' in inventory_hostname"
+      when: "'primary' in group_names"
       changed_when: false
 
     - name: Execute check script on secondary MongoDB server
       ansible.builtin.command: /tmp/check_replication.sh
       register: check_replication
-      when: "'mongodb-secondary' in inventory_hostname"
+      when: "'secondary' in group_names"
       changed_when: false
 
     - name: Display check script output
       ansible.builtin.debug:
         msg: "{{ check_replication.stdout }}"
-      when: "'mongodb-secondary' in inventory_hostname"
+      when: "'secondary' in group_names"

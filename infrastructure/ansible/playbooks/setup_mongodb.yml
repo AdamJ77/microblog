@@ -1,0 +1,13 @@
+---
+- hosts: mongo_database
+  roles:
+    - { role: common }
+    - { role: mongodb_all }
+
+- hosts: primary
+  roles:
+    - { role: mongodb_primary } # MUST BE RUN TOGETHER WITH THE FIRST ROLE
+
+- hosts: secondary
+  roles:
+    - { role: mongodb_secondary }
