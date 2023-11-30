@@ -19,6 +19,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
   },
   "data": [{
     "id": "7",
+    "type": "posts",
     "attributes": {
       "author": {
         "id": "213",
@@ -35,6 +36,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
     }
   }, {
     "id": "13",
+    "type": "posts",
     "attributes": {
       "author": {
         "id": "411",
