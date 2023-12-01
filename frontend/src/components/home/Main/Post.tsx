@@ -22,7 +22,7 @@ export default function Post({ post }: IPostProps) {
       <div className={styles.avatar}>
         <Avatar image={post.author.avatar} alt={post.author.name} />
       </div>
-      <div>
+      <div style={{ width: "100%" }}>
         <div className={styles.header}>
           <h3>{post.author.name}</h3>
           <span className={styles.date}>{dateText}</span>
