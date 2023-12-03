@@ -4,17 +4,28 @@ from backend.domain import entities, gateways
 
 
 @pytest.fixture
-def post_author():
-    return entities.User(id=0, name="Author")
+def media():
+    return entities.Media(
+        entities.Media.Type.IMAGE, "http://microblog.com/posts/13/image1.jpg"
+    )
 
 
 @pytest.fixture
-def post(post_author):
+def post_author():
+    return entities.User(id="0", name="Author")
+
+
+@pytest.fixture
+def post(post_author, media):
     from datetime import datetime
 
     post_date = datetime.fromtimestamp(0)
     return entities.Post(
-        id=0, text="Bajojajo", author=post_author, date=post_date
+        id="0",
+        text="Bajojajo",
+        author=post_author,
+        media=[media],
+        date=post_date,
     )
 
 

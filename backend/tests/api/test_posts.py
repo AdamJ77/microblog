@@ -1,4 +1,4 @@
-from backend.domain.entities import User, Post, Timeline
+from backend.domain.entities import User, Post, Timeline, Media
 from backend.api.routers.posts import db, timeline
 import pytest
 
@@ -13,7 +13,15 @@ def post(post_author):
     from datetime import datetime
 
     post_date = datetime.fromtimestamp(0)
-    return Post(id=0, text="Bajojajo", author=post_author, date=post_date)
+    return Post(
+        id=0,
+        text="Bajojajo",
+        author=post_author,
+        media=[
+            Media(Media.Type.IMAGE, "http://microblog.com/posts/13/image1.jpg")
+        ],
+        date=post_date,
+    )
 
 
 @pytest.fixture
@@ -65,3 +73,8 @@ def test_get_posts_two_posts(client, mock_db_and_timeline):
 
         assert post["attributes"]["body"] == "Bajojajo"
         assert post["attributes"]["created"] == "1970-01-01T01:00:00.000Z"
+
+        media = post["attributes"]["media"]
+        for m in media:
+            assert m["type"] == "image"
+            assert m["src"] == "http://microblog.com/posts/13/image1.jpg"

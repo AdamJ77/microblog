@@ -37,6 +37,7 @@ async def get_posts(start: int, count: int):
         datetime = (
             str(p.datetime.date()) + "T" + str(p.datetime.time()) + ".000Z"
         )
+        media = [{"type": m.type.name.lower(), "src": m.src} for m in p.media]
         data.append(
             {
                 "id": p.id,
@@ -45,6 +46,7 @@ async def get_posts(start: int, count: int):
                     "author": author,
                     "body": p.text,
                     "created": datetime,
+                    "media": media,
                 },
             }
         )

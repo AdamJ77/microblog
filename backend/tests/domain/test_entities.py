@@ -1,4 +1,4 @@
-from backend.domain.entities import Post, User, Timeline
+from backend.domain.entities import Post, User, Timeline, Media
 from datetime import datetime
 from freezegun import freeze_time
 
@@ -6,8 +6,16 @@ from freezegun import freeze_time
 ZERO_TIMESTAMP = "1970-01-01 00:00:00"
 
 
+def test_media_get_type(media):
+    assert media.type == Media.Type.IMAGE
+
+
+def test_media_get_src(media):
+    assert media.src == "http://microblog.com/posts/13/image1.jpg"
+
+
 def test_post_get_id(post: Post):
-    assert post.id == 0
+    assert post.id == "0"
 
 
 def test_post_get_text(post: Post):
@@ -20,6 +28,10 @@ def test_post_get_author(post: Post, post_author: User):
 
 def test_post_get_datetime(post: Post):
     assert post.datetime == datetime.fromtimestamp(0)
+
+
+def test_post_get_media(post: Post, media):
+    assert post.media == [media]
 
 
 @freeze_time(ZERO_TIMESTAMP)
@@ -36,7 +48,7 @@ def test_post_get_priority_zero_timestamp():
 
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_priority_one_hour_timestamp():
-    post = Post(0, "", None, datetime.fromtimestamp(-3600))
+    post = Post("0", "", None, date=datetime.fromtimestamp(-3600))
     assert post.priority == -3600
 
 
