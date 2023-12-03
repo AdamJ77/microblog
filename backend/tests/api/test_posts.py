@@ -1,12 +1,11 @@
 from backend.domain.entities import User, Post, Timeline
 from backend.api.routers.posts import db, timeline
-from backend.domain import gateways
 import pytest
 
 
 @pytest.fixture
 def post_author():
-    return User(name="Author")
+    return User(id=0, name="Author")
 
 
 @pytest.fixture
@@ -14,7 +13,7 @@ def post(post_author):
     from datetime import datetime
 
     post_date = datetime.fromtimestamp(0)
-    return Post(text="Bajojajo", author=post_author, date=post_date)
+    return Post(id=0, text="Bajojajo", author=post_author, date=post_date)
 
 
 @pytest.fixture
@@ -55,10 +54,12 @@ def test_get_posts_two_posts(client, mock_db_and_timeline):
     assert len(data) == 2
 
     for post in data:
+        assert post["id"] == 0
         assert post["type"] == "posts"
 
         avatar_src = "http://microblog.com/users/avatars/Author.png"
         author = post["attributes"]["author"]
+        assert author["id"] == 0
         assert author["attributes"]["name"] == "Author"
         assert author["attributes"]["avatar"]["src"] == avatar_src
 

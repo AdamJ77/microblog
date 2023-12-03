@@ -2,8 +2,13 @@ from datetime import datetime
 
 
 class User:
-    def __init__(self, name) -> None:
+    def __init__(self, id, name) -> None:
+        self.__id = id
         self.__name = name
+
+    @property
+    def id(self) -> str:
+        return self.__id
 
     @property
     def name(self) -> str:
@@ -11,10 +16,15 @@ class User:
 
 
 class Post:
-    def __init__(self, text, author, date: datetime = None) -> None:
+    def __init__(self, id, text, author, date: datetime = None) -> None:
+        self.__id = id
         self.__text = text
         self.__author = author
         self.__datetime = date or datetime.today()
+
+    @property
+    def id(self) -> int:
+        return self.__id
 
     @property
     def text(self) -> str:

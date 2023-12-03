@@ -6,8 +6,12 @@ from freezegun import freeze_time
 ZERO_TIMESTAMP = "1970-01-01 00:00:00"
 
 
+def test_post_get_id(post: Post):
+    assert post.id == 0
+
+
 def test_post_get_text(post: Post):
-    assert post.text == 'Bajojajo'
+    assert post.text == "Bajojajo"
 
 
 def test_post_get_author(post: Post, post_author: User):
@@ -20,7 +24,7 @@ def test_post_get_datetime(post: Post):
 
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_current_datetime(post_author):
-    post = Post("", post_author)
+    post = Post(0, "", post_author)
     assert post.datetime == datetime.fromtimestamp(0)
 
 
@@ -32,12 +36,16 @@ def test_post_get_priority_zero_timestamp():
 
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_priority_one_hour_timestamp():
-    post = Post("", None, datetime.fromtimestamp(-3600))
+    post = Post(0, "", None, datetime.fromtimestamp(-3600))
     assert post.priority == -3600
 
 
+def test_user_get_id(user: User):
+    assert user.id == 0
+
+
 def test_user_get_name(user: User):
-    assert user.name == 'Maciej'
+    assert user.name == "Maciej"
 
 
 def test_timeline_init_posts(timeline: Timeline, posts: dict):
@@ -53,8 +61,8 @@ def test_timeline_add_and_get_post(timeline: Timeline, post):
 
 
 def test_timeline_overflow(timeline: Timeline, posts):
-    timeline.try_add_post(posts['low priority'])
-    assert timeline.posts == [posts['low priority']]
+    timeline.try_add_post(posts["low priority"])
+    assert timeline.posts == [posts["low priority"]]
 
-    timeline.try_add_post(posts['high priority'])
-    assert timeline.posts == [posts['high priority']]
+    timeline.try_add_post(posts["high priority"])
+    assert timeline.posts == [posts["high priority"]]

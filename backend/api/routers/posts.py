@@ -28,16 +28,18 @@ async def get_posts(start: int, count: int):
     data = []
     for p in posts:
         author = {
+            "id": p.author.id,
             "attributes": {
                 "name": p.author.name,
                 "avatar": {"src": AVATAR_BASE_URL + p.author.name + ".png"},
-            }
+            },
         }
         datetime = (
             str(p.datetime.date()) + "T" + str(p.datetime.time()) + ".000Z"
         )
         data.append(
             {
+                "id": p.id,
                 "type": "posts",
                 "attributes": {
                     "author": author,
