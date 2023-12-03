@@ -1,0 +1,23 @@
+# Check if aks was created
+az aks show --resource-group Microblog1 --name aks-Microblog1
+
+# Configure kubectl context to AKS cluster using newly created credentials
+az aks get-credentials --resource-group Microblog1 --name aks-Microblog1
+
+# Create simple deployment using nginx image app (start single instance)
+kubectl create deployment nginx --image=nginx
+
+# Check created pods/deployment
+kubectl get pods
+kubectl get deployment
+
+# Create a Service by exposing the deployment
+kubectl expose deployment nginx-deployment --port=80 --type=LoadBalancer
+
+# Retrieve external IP address of this service
+kubectl get svc nginx
+
+# Delete created test resources
+kubectl delete svc nginx
+kubectl delete deployment nginx
+kubectl delete pods <pod_name>
