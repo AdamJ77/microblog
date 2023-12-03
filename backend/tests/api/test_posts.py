@@ -51,7 +51,7 @@ def test_get_posts_two_posts(client, mock_db_and_timeline):
         assert author["attributes"]["avatar"]["src"] == avatar_src
 
         assert post["attributes"]["body"] == "Bajojajo"
-        assert post["attributes"]["created"] == "1970-01-01T01:00:00.000Z"
+        assert post["attributes"]["created"] == "1970-01-01T00:00:00.000Z"
 
         media = post["attributes"]["media"]
         for m in media:

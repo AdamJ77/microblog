@@ -12,13 +12,13 @@ def posts(post_author):
             id=0,
             text="low",
             author=post_author,
-            date=datetime.fromtimestamp(0),
+            date=datetime.utcfromtimestamp(0),
         ),
         "high priority": entities.Post(
             id=1,
             text="high",
             author=post_author,
-            date=datetime.fromtimestamp(999999),
+            date=datetime.utcfromtimestamp(999999),
         ),
     }
 

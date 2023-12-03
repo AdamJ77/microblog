@@ -40,7 +40,7 @@ def post_author():
 def post(post_author, media):
     from datetime import datetime
 
-    post_date = datetime.fromtimestamp(0)
+    post_date = datetime.utcfromtimestamp(0)
     return entities.Post(
         id="0",
         text="Bajojajo",

@@ -27,7 +27,7 @@ def test_post_get_author(post: Post, post_author: User):
 
 
 def test_post_get_datetime(post: Post):
-    assert post.datetime == datetime.fromtimestamp(0)
+    assert post.datetime == datetime.utcfromtimestamp(0)
 
 
 def test_post_get_media(post: Post, media):
@@ -37,18 +37,18 @@ def test_post_get_media(post: Post, media):
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_current_datetime(post_author):
     post = Post(0, "", post_author)
-    assert post.datetime == datetime.fromtimestamp(0)
+    assert post.datetime == datetime.utcfromtimestamp(0)
 
 
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_priority_zero_timestamp():
-    post = Post("", None, datetime.fromtimestamp(0))
+    post = Post("", None, datetime.utcfromtimestamp(0))
     assert post.priority == 0
 
 
 @freeze_time(ZERO_TIMESTAMP)
 def test_post_get_priority_one_hour_timestamp():
-    post = Post("0", "", None, date=datetime.fromtimestamp(-3600))
+    post = Post("0", "", None, date=datetime.utcfromtimestamp(-3600))
     assert post.priority == -3600
 
 
