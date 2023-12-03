@@ -1,5 +1,5 @@
 from backend.domain.entities import User, Post, Timeline
-from backend.api.routers import posts
+from backend.api.routers.posts import db, timeline
 from backend.domain import gateways
 import pytest
 
@@ -19,18 +19,16 @@ def post(post_author):
 
 @pytest.fixture
 def mock_db_and_timeline(monkeypatch, post):
-    class FakePostStorageAdapter(gateways.PostStorageInterface):
-        def get_any_posts(self, count) -> list[Post]:
-            return [post]
+    def mock_get_any_posts(count) -> list[Post]:
+        return [post]
 
-    class FakeTimelineStorageAdapter(gateways.TimelineStorageInterface):
-        def read(self) -> Timeline:
-            t = Timeline(10)
-            t.init_posts([post])
-            return t
+    def mock_read() -> Timeline:
+        t = Timeline(10)
+        t.init_posts([post])
+        return t
 
-    monkeypatch.setattr(posts, "db", FakePostStorageAdapter())
-    monkeypatch.setattr(posts, "timeline", FakeTimelineStorageAdapter())
+    monkeypatch.setattr(db, "get_any_posts", mock_get_any_posts)
+    monkeypatch.setattr(timeline, "read", mock_read)
 
 
 def test_get_posts_no_posts(client, mock_db_and_timeline):
