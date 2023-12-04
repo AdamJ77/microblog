@@ -25,7 +25,9 @@ def test_get_subset_of_posts_no_posts(
     post_storage: PostStorageInterface,
     timeline_storage: TimelineStorageInterface,
 ):
-    result = use_cases.get_subset_of_posts(post_storage, timeline_storage, 10)
+    result = use_cases.get_subset_of_posts(
+        post_storage, timeline_storage, start=0, count=10
+    )
     assert len(result) == 0
 
 
@@ -34,11 +36,13 @@ def test_get_subset_of_posts_timeline_only(
 ):
     use_cases.add_post(post_storage, timeline_storage, post)
 
-    result = use_cases.get_subset_of_posts(None, timeline_storage, 1)
+    result = use_cases.get_subset_of_posts(
+        None, timeline_storage, start=0, count=1
+    )
     assert len(result) == 1
 
     with pytest.raises(AttributeError):
-        use_cases.get_subset_of_posts(None, timeline_storage, 2)
+        use_cases.get_subset_of_posts(None, timeline_storage, start=0, count=2)
 
 
 def test_get_subset_of_posts_not_enough_in_timeline(
@@ -49,7 +53,9 @@ def test_get_subset_of_posts_not_enough_in_timeline(
     use_cases.add_post(post_storage, timeline_storage, post)
     use_cases.add_post(post_storage, timeline_storage, post)
 
-    result = use_cases.get_subset_of_posts(post_storage, timeline_storage, 2)
+    result = use_cases.get_subset_of_posts(
+        post_storage, timeline_storage, start=0, count=2
+    )
     assert len(result) == 2
 
 

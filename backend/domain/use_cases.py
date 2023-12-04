@@ -19,8 +19,8 @@ def add_post(
 def get_subset_of_posts(
     post_storage: PostStorageInterface,
     timeline_storage: TimelineStorageInterface,
+    start,
     count,
-    start=0,
 ):
     end = start + count
     posts = timeline_storage.read().posts

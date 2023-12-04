@@ -24,7 +24,9 @@ timeline = TimelineStorageAdapter()
 @router.get("/")
 async def get_posts(start: int, count: int):
     next = start + count
-    posts = use_cases.get_subset_of_posts(db, timeline, count)
+    posts = use_cases.get_subset_of_posts(
+        db, timeline, start=start, count=count
+    )
     data = []
     for p in posts:
         author = {
