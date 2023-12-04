@@ -16,6 +16,6 @@ variable "virtual_network_name" {
 
 variable "component" {
   type = list(string)
-  default = ["mongo-database"]
+  default = ["mongo_database"]
   description = "Database component name"
 }

@@ -64,13 +64,13 @@ resource "azurerm_public_ip" "public_ip" {
 
 # Create Network Security Group
 resource "azurerm_network_security_group" "mongodb_nsg" {
-  name                = "mongodb-nsg"
+  name                = var.nsg_name
   location            = module.global_setup.resource_group_location
   resource_group_name = module.global_setup.resource_group_name
 }
 
 resource "azurerm_network_security_rule" "ssh_inbound_rule" {
-  name                        = "Test-inbound-rule"
+  name                        = "SSH-inbound-rule"
   priority                    = 100
   direction                   = "Inbound"
   access                      = "Allow"
@@ -84,7 +84,7 @@ resource "azurerm_network_security_rule" "ssh_inbound_rule" {
 }
 
 resource "azurerm_network_security_rule" "outbound_rule" {
-  name                        = "example-outbound-rule"
+  name                        = "All-outbound-rule"
   priority                    = 200
   direction                   = "Outbound"
   access                      = "Allow"

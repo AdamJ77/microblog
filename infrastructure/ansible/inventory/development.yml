@@ -6,8 +6,8 @@ include_vm_resource_groups:
   - Microblog1
 
 keyed_groups:
-  - prefix: 'mongodb'
-    key: tags.DB_Role
+  - prefix: ''
+    key: tags.DBRole
     separator: ""
   - prefix: ''
     key: tags.ComponentType

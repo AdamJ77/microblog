@@ -11,3 +11,6 @@
 **/.terraform*
 
 secrets.tfvars
+
+# Backend conf
+**/*.conf
