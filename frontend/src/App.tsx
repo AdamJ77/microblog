@@ -5,6 +5,8 @@ import "react-photo-view/dist/react-photo-view.css";
 
 const Home = lazy(() => import("./pages/Home"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
 
 export default function App() {
   const suspensify = (Component: ComponentType) => {
@@ -31,6 +33,14 @@ export default function App() {
     {
       path: "/",
       component: Home,
+    },
+    {
+      path: "/login",
+      component: Login,
+    },
+    {
+      path: "/signup",
+      component: Signup,
     },
     {
       path: "*",
