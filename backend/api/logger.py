@@ -57,7 +57,7 @@ class LoggingRoute(APIRoute):
 
 
 def init_logger(log_level=logging.DEBUG, log_path='microblog-api.log'):
-    logger = logging.getLogger(__file__)
+    logger = logging.getLogger('root')
     logger.setLevel(log_level)
 
     handlers = [
