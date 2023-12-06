@@ -13,7 +13,8 @@ def mongodb_container():
 
 @pytest.fixture
 def db(request, mongodb_container) -> Database:
-    return getattr(mongodb_container.get_connection_client(), request.node.name)
+    client = mongodb_container.get_connection_client()
+    return getattr(client, request.node.name)
 
 
 @pytest.fixture(autouse=True)
