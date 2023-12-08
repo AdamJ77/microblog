@@ -34,10 +34,10 @@ def post_storage():
         def __init__(self) -> None:
             self.posts = []
 
-        def add_post(self, post: entities.Post):
+        async def add_post(self, post: entities.Post):
             self.posts.append(post)
 
-        def get_any_posts(self, count):
+        async def get_any_posts(self, count):
             return self.posts[:count]
 
     return FakePostStorage()
@@ -54,10 +54,10 @@ def timeline_storage(timeline):
         def __init__(self) -> None:
             self.timeline = timeline
 
-        def read(self) -> entities.Timeline:
+        async def read(self) -> entities.Timeline:
             return copy.deepcopy(self.timeline)
 
-        def write(self, timeline: entities.Timeline):
+        async def write(self, timeline: entities.Timeline):
             self.timeline = copy.deepcopy(timeline)
 
     return FakeTimelineStorage()
