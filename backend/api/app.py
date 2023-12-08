@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from backend.api.database.db import Database
 from backend.api.logger import init_logger
-from backend.api.routers import hello
+from backend.api.routers import hello, posts
 
 
 @asynccontextmanager
@@ -21,9 +21,10 @@ def create_app():
 
     # including routers
     app.include_router(hello.router)
+    app.include_router(posts.router)
 
     return app
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_app()

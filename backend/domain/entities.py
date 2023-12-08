@@ -1,9 +1,33 @@
 from datetime import datetime
+from enum import Enum, auto
+
+
+class Media:
+    class Type(Enum):
+        IMAGE = auto()
+        VIDEO = auto()
+
+    def __init__(self, type, src) -> None:
+        self.__type = type
+        self.__src = src
+
+    @property
+    def type(self) -> Type:
+        return self.__type
+
+    @property
+    def src(self) -> str:
+        return self.__src
 
 
 class User:
-    def __init__(self, name) -> None:
+    def __init__(self, id, name) -> None:
+        self.__id = id
         self.__name = name
+
+    @property
+    def id(self) -> str:
+        return self.__id
 
     @property
     def name(self) -> str:
@@ -11,10 +35,18 @@ class User:
 
 
 class Post:
-    def __init__(self, text, author, date: datetime = None) -> None:
+    def __init__(
+        self, id, text, author, media=None, date: datetime = None
+    ) -> None:
+        self.__id = id
         self.__text = text
         self.__author = author
+        self.__media = media or []
         self.__datetime = date or datetime.today()
+
+    @property
+    def id(self) -> str:
+        return self.__id
 
     @property
     def text(self) -> str:
@@ -23,6 +55,10 @@ class Post:
     @property
     def author(self) -> User:
         return self.__author
+
+    @property
+    def media(self) -> list[Media]:
+        return self.__media
 
     @property
     def datetime(self) -> datetime:
@@ -48,7 +84,8 @@ class Timeline:
 
     def __truncate(self):
         self.__posts.sort(key=lambda post: -post.priority)
-        del self.__posts[self.__capacity:]
+        truncate_start = self.__capacity
+        del self.__posts[truncate_start:]
 
     @property
     def posts(self) -> list[Post]:

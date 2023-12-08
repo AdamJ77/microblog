@@ -4,40 +4,28 @@ from backend.domain import entities, gateways
 
 
 @pytest.fixture
-def post_author():
-    return entities.User(name='Author')
-
-
-@pytest.fixture
-def post(post_author):
-    from datetime import datetime
-
-    post_date = datetime.fromtimestamp(0)
-    return entities.Post(
-        text='Bajojajo',
-        author=post_author,
-        date=post_date)
-
-
-@pytest.fixture
 def posts(post_author):
     from datetime import datetime
 
     return {
-        'low priority': entities.Post(
-            text='low',
+        "low priority": entities.Post(
+            id=0,
+            text="low",
             author=post_author,
-            date=datetime.fromtimestamp(0)),
-        'high priority': entities.Post(
-            text='high',
+            date=datetime.utcfromtimestamp(0),
+        ),
+        "high priority": entities.Post(
+            id=1,
+            text="high",
             author=post_author,
-            date=datetime.fromtimestamp(999999))
+            date=datetime.utcfromtimestamp(999999),
+        ),
     }
 
 
 @pytest.fixture
 def user():
-    return entities.User(name='Maciej')
+    return entities.User(id=0, name="Maciej")
 
 
 @pytest.fixture()
@@ -51,6 +39,7 @@ def post_storage():
 
         def get_any_posts(self, count):
             return self.posts[:count]
+
     return FakePostStorage()
 
 
