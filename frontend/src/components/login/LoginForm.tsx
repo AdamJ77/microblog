@@ -18,8 +18,14 @@ export default function LoginForm() {
       console.log(key, val);
     });
 
+    fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+      method: "POST",
+      body: formData,
+    }).then((res) => {
+      if (res.status === 200) navigate("/");
+    });
+
     // simulation of logging in
-    navigate("/");
   };
 
   return (
