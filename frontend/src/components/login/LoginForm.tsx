@@ -10,7 +10,7 @@ export default function LoginForm() {
     navigate("/signup");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -18,14 +18,19 @@ export default function LoginForm() {
       console.log(key, val);
     });
 
-    fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
       method: "POST",
       body: formData,
-    }).then((res) => {
-      if (res.status === 200) navigate("/");
     });
 
-    // simulation of logging in
+    if (response.status !== 200) return;
+
+    const data = await response.json();
+
+    localStorage.setItem("token", data.token);
+    // document.cookie = `Authorization=Bearer ${data.token}; path=/; secure; SameSite=None; HttpOnly`;
+
+    navigate("/");
   };
 
   return (

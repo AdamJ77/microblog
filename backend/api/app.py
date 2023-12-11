@@ -27,7 +27,7 @@ def create_app():
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # You can replace "*" with specific origins if needed
+        allow_origins=["http://localhost:3000"],  # You can replace "*" with specific origins if needed
         allow_credentials=True,
         allow_methods=["*"],  # You can replace "*" with specific HTTP methods
         allow_headers=["*"],  # You can replace "*" with specific headers
