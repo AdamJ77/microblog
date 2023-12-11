@@ -12,8 +12,8 @@ from backend.api.routers import hello, posts
 async def lifespan(app: FastAPI):
     db_client = Database()
     app.database = await db_client.database
-    app.post_storage = adapters.PostStorageDatabaseAdapter(app.database)
-    app.timeline = adapters.TimelineStorageDatabaseAdapter(app.database)
+    app.post_storage = adapters.PostStorageDatabase(app.database)
+    app.timeline = adapters.TimelineStorageDatabase(app.database)
     yield
     await db_client.close()
 

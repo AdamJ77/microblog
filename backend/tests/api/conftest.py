@@ -1,9 +1,10 @@
 from fastapi.testclient import TestClient
 from backend.api.app import Database
+from pymongo.collection import Collection
 import pytest
 
 
-def insert_example_post(db):
+def insert_example_post(collection: Collection):
     post = {
         "type": "posts",
         "attributes": {
@@ -26,13 +27,11 @@ def insert_example_post(db):
             ],
         },
     }
-    db["posts"].insert_one(post)
+    collection.insert_one(post)
 
 
 @pytest.fixture
-def client(request, monkeypatch, mongodb_container) -> TestClient:
-    from backend.api.app import create_app
-
+def mock_database(request, monkeypatch, mongodb_container):
     monkeypatch.setenv(
         "DB_CONNECTION_URL", mongodb_container.get_connection_url()
     )
@@ -43,8 +42,13 @@ def client(request, monkeypatch, mongodb_container) -> TestClient:
 
     client = mongodb_container.get_connection_client()
     db = getattr(client, request.node.name)
-    insert_example_post(db)
-    insert_example_post(db)
+    insert_example_post(db['posts'])
+    insert_example_post(db['timeline'])
+
+
+@pytest.fixture
+def client(mock_database) -> TestClient:
+    from backend.api.app import create_app
 
     app = create_app()
     with TestClient(app) as testclient:
