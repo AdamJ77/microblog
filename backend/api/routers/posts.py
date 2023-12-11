@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from backend.domain import use_cases, gateways
+from starlette.requests import Request
+from backend.domain import use_cases
 
 AVATAR_BASE_URL = "http://microblog.com/users/avatars/"
 
@@ -9,23 +10,14 @@ router = APIRouter(
 )
 
 
-class PostStorageAdapter(gateways.PostStorageInterface):
-    pass
-
-
-class TimelineStorageAdapter(gateways.TimelineStorageInterface):
-    pass
-
-
-db = PostStorageAdapter()
-timeline = TimelineStorageAdapter()
-
-
 @router.get("/")
-async def get_posts(start: int, count: int):
+async def get_posts(request: Request, start: int, count: int):
     next = start + count
-    posts = use_cases.get_subset_of_posts(
-        db, timeline, start=start, count=count
+    posts = await use_cases.get_subset_of_posts(
+        request.app.post_storage,
+        request.app.timeline,
+        start=start,
+        count=count,
     )
     data = []
     for p in posts:
@@ -36,8 +28,8 @@ async def get_posts(start: int, count: int):
                 "avatar": {"src": AVATAR_BASE_URL + p.author.name + ".png"},
             },
         }
-        datetime = (
-            str(p.datetime.date()) + "T" + str(p.datetime.time()) + ".000Z"
+        datetime = p.datetime.strftime(
+            f"%Y-%m-%dT%H:%M:%S.{p.datetime.microsecond // 1000}Z"
         )
         media = [{"type": m.type.name.lower(), "src": m.src} for m in p.media]
         data.append(

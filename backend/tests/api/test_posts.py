@@ -1,23 +1,4 @@
-from backend.domain.entities import Post, Timeline
-from backend.api.routers.posts import db, timeline
-import pytest
-
-
-@pytest.fixture
-def mock_db_and_timeline(monkeypatch, post):
-    def mock_get_any_posts(count) -> list[Post]:
-        return [post]
-
-    def mock_read() -> Timeline:
-        t = Timeline(10)
-        t.init_posts([post])
-        return t
-
-    monkeypatch.setattr(db, "get_any_posts", mock_get_any_posts)
-    monkeypatch.setattr(timeline, "read", mock_read)
-
-
-def test_get_posts_no_posts(client, mock_db_and_timeline):
+def test_get_posts_no_posts(client):
     response = client.get("/posts/?start=0&count=0")
     assert response.status_code == 200
     response_content = response.json()
@@ -28,7 +9,7 @@ def test_get_posts_no_posts(client, mock_db_and_timeline):
     assert response_content["data"] == []
 
 
-def test_get_posts_two_posts(client, mock_db_and_timeline):
+def test_get_posts_two_posts(client):
     response = client.get("/posts/?start=0&count=2")
     assert response.status_code == 200
     response_content = response.json()
@@ -41,17 +22,16 @@ def test_get_posts_two_posts(client, mock_db_and_timeline):
     assert len(data) == 2
 
     for post in data:
-        assert post["id"] == "0"
         assert post["type"] == "posts"
 
-        avatar_src = "http://microblog.com/users/avatars/Author.png"
+        avatar_src = "http://microblog.com/users/avatars/Greg.png"
         author = post["attributes"]["author"]
-        assert author["id"] == "0"
-        assert author["attributes"]["name"] == "Author"
+        assert author["id"] == "213"
+        assert author["attributes"]["name"] == "Greg"
         assert author["attributes"]["avatar"]["src"] == avatar_src
 
         assert post["attributes"]["body"] == "Bajojajo"
-        assert post["attributes"]["created"] == "1970-01-01T00:00:00.000Z"
+        assert post["attributes"]["created"] == "2023-04-20T18:34:59.213Z"
 
         media = post["attributes"]["media"]
         for m in media:
