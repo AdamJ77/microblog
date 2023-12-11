@@ -1,6 +1,6 @@
 from backend.domain.entities import Post, Timeline, User, Media
 from backend.domain import gateways
-from motor.motor_asyncio import AsyncIOMotorDatabase
+from motor.motor_asyncio import AsyncIOMotorDatabase, AsyncIOMotorCursor
 import datetime
 
 
@@ -12,9 +12,9 @@ class PostStorageDatabaseAdapter(gateways.PostStorageInterface):
         pass
 
     async def get_any_posts(self, count) -> list[Post]:
-        cursor = self.db["posts"].find(limit=count)
+        cursor: AsyncIOMotorCursor = self.db["posts"].find(limit=count)
         posts = []
-        for p in cursor:
+        for p in await cursor.to_list(None):
             attributes = p["attributes"]
             author = attributes["author"]
             media = attributes["media"]
