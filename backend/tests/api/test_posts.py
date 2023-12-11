@@ -1,3 +1,7 @@
+from backend.api.routers import posts
+from datetime import datetime
+
+
 def test_get_posts_no_posts(client):
     response = client.get("/posts/?start=0&count=0")
     assert response.status_code == 200
@@ -37,3 +41,24 @@ def test_get_posts_two_posts(client):
         for m in media:
             assert m["type"] == "image"
             assert m["src"] == "http://microblog.com/posts/13/image1.jpg"
+
+
+def test_get_datetime_str_zero_microseconds():
+    d = datetime(1000, 1, 1, 1, 1, 1, microsecond=0)
+    s = posts.get_datetime_str(d)
+    assert len(s) == 24
+    assert s[-4:-1] == "000"
+
+
+def test_get_datetime_str_too_big_precision():
+    d = datetime(1000, 1, 1, 1, 1, 1, microsecond=999)
+    s = posts.get_datetime_str(d)
+    assert len(s) == 24
+    assert s[-4:-1] == "000"
+
+
+def test_get_datetime_str_good_precision():
+    d = datetime(1000, 1, 1, 1, 1, 1, microsecond=234000)
+    s = posts.get_datetime_str(d)
+    assert len(s) == 24
+    assert s[-4:-1] == "234"

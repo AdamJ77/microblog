@@ -10,6 +10,12 @@ router = APIRouter(
 )
 
 
+def get_datetime_str(datetime):
+    return datetime.strftime(
+        f"%Y-%m-%dT%H:%M:%S.{datetime.microsecond // 1000:03}Z"
+    )
+
+
 @router.get("/")
 async def get_posts(request: Request, start: int, count: int):
     next = start + count
@@ -28,9 +34,7 @@ async def get_posts(request: Request, start: int, count: int):
                 "avatar": {"src": AVATAR_BASE_URL + p.author.name + ".png"},
             },
         }
-        datetime = p.datetime.strftime(
-            f"%Y-%m-%dT%H:%M:%S.{p.datetime.microsecond // 1000}Z"
-        )
+        datetime = get_datetime_str(p.datetime)
         media = [{"type": m.type.name.lower(), "src": m.src} for m in p.media]
         data.append(
             {
