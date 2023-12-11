@@ -73,7 +73,7 @@ async def test_get_subset_of_posts_different_start(
     posts,
 ):
     timeline.init_posts([posts["high priority"]])
-    timeline_storage.write(timeline)
+    await timeline_storage.write(timeline)
     await post_storage.add_post(posts["low priority"])
 
     result1 = await use_cases.get_subset_of_posts(
