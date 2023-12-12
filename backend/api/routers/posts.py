@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from starlette.requests import Request
 from backend.domain import use_cases
 
@@ -55,3 +55,33 @@ async def get_posts(request: Request, start: int, count: int):
         },
         "data": data,
     }
+
+
+@router.post("/")
+async def add_post(request: Request):
+    from backend.domain.entities import Post, User, Media
+    from datetime import datetime
+
+    body = await request.json()
+    data = body["data"]
+    if data["type"] != "posts":
+        raise HTTPException(
+            status_code=400, detail=f"Invalid item type: {data['type']}"
+        )
+
+    author = User("213", "Greg")
+    media = [
+        Media(Media.Type[m["type"].upper()], m["src"])
+        for m in data["attributes"]["media"]
+    ]
+    post = Post(
+        id=None,
+        text=data["attributes"]["body"],
+        author=author,
+        media=media,
+        date=datetime.now(),
+    )
+    await use_cases.add_post(
+        request.app.post_storage, request.app.timeline, post
+    )
+    return {"id": "0"}

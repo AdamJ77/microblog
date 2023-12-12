@@ -69,11 +69,10 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
     "type": "posts",
     "attributes": {
       "body": "Bajojajo",
-      "media": [
-        "<Some link to uploaded image>",
-        "<Some link to uploaded image>",
-        "<Some link to uploaded image>"
-      ]
+      "media": [{
+          "type": "image",
+          "src": "http://microblog.com/posts/13/image1.jpg"
+      }]
     }
   }
 }

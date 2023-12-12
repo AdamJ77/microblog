@@ -26,7 +26,7 @@ def media():
 
 @pytest.fixture
 def post_author():
-    return entities.User(id="0", name="Author")
+    return entities.User(id="213", name="Greg")
 
 
 @pytest.fixture
