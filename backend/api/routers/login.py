@@ -5,6 +5,21 @@ from backend.api.logger import LoggingRoute
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
+users = [
+    {
+        "id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22",
+        "login": "login1",
+        "password": "pass1",
+        "name": "Elon Musk"
+    },
+    {
+        "id": "048358e2-42bf-4c1b-9569-7301902c11c7",
+        "login": "login2",
+        "password": "pass2",
+        "name": "Suchoklates"
+    },
+]
+
 SECRET_KEY = "your-secret-key"
 
 # Algorithm to use for JWT
@@ -37,12 +52,16 @@ async def login(request: Request):
     if not login or not password:
         raise HTTPException(status_code=400, detail="Login and password are required")
 
-    if login != "login" or password != "pass":
+    found_user = None
+    for user in users:
+        if login == user["login"] and password == user["password"]:
+            found_user = user
+            break
+    
+    if not found_user:
         raise HTTPException(status_code=401)
 
-    token_data = {
-        "id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"
-    }
+    token_data = { "id": found_user["id"] }
     access_token = create_jwt_token(token_data)
 
     return {"token": access_token}
@@ -65,5 +84,11 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 @router.get("/test")
-async def login_test(current_user: str = Depends(get_current_user)):
-    return {"message": "Test route", "current_user": current_user}
+async def login_test(user_id: str = Depends(get_current_user)):
+    found_name = None
+    for user in users:
+        if user["id"] == user_id:
+            found_name = user["name"]
+            break
+        
+    return {"name": found_name}
