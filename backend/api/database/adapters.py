@@ -84,4 +84,7 @@ class TimelineStorageDatabase(gateways.TimelineStorageInterface):
         return timeline
 
     async def write(self, timeline: Timeline):
-        pass
+        await self.db["timeline"].delete_many(filter={})  # Delete all
+        await self.db["timeline"].insert_many(
+            [post_to_doc(p) for p in timeline.posts]
+        )

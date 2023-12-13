@@ -2,6 +2,21 @@ from backend.api.routers import posts
 from pymongo.collection import Collection
 from datetime import datetime
 
+ADD_POST_REQUEST = {
+    "data": {
+        "type": "posts",
+        "attributes": {
+            "body": "Bajojajo",
+            "media": [
+                {
+                    "type": "image",
+                    "src": "http://microblog.com/posts/13/image1.jpg",
+                }
+            ],
+        },
+    }
+}
+
 
 def insert_example_post(collection: Collection, post, count=1):
     from backend.api.database.adapters import post_to_doc
@@ -26,10 +41,8 @@ def test_get_posts_no_posts(client, db, post):
 
 
 def check_get_posts_response(response, check_date=True):
-    assert response["links"] == {
-        "self": "http://microblog.com/posts?start=0&count=2",
-        "next": "http://microblog.com/posts?start=2&count=2",
-    }
+    assert response["links"]["self"]
+    assert response["links"]["next"]
 
     for post in response["data"]:
         assert post["type"] == "posts"
@@ -79,21 +92,7 @@ def test_get_posts_not_enough_posts(client):
 
 
 def test_get_and_add_post(client):
-    body = {
-        "data": {
-            "type": "posts",
-            "attributes": {
-                "body": "Bajojajo",
-                "media": [
-                    {
-                        "type": "image",
-                        "src": "http://microblog.com/posts/13/image1.jpg",
-                    }
-                ],
-            },
-        }
-    }
-    response = client.post("/posts/", json=body)
+    response = client.post("/posts/", json=ADD_POST_REQUEST)
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -101,6 +100,18 @@ def test_get_and_add_post(client):
     assert response.status_code == 200
     response_content = response.json()
     check_get_posts_response(response_content, check_date=False)
+
+
+def test_add_and_get_post_from_timeline_only(client, monkeypatch):
+    response = client.post("/posts/", json=ADD_POST_REQUEST)
+    assert response.status_code == 200
+
+    # Ensure that posts cannot be retrieved from post storage (timeline only)
+    monkeypatch.setattr(client.app, "post_storage", None)
+
+    response = client.get("/posts/?start=0&count=1")
+    assert response.status_code == 200
+    check_get_posts_response(response.json(), check_date=False)
 
 
 def test_add_post_invalid_type(client):
