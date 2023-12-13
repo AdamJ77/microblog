@@ -69,15 +69,14 @@ class PostStorageDatabase(gateways.PostStorageInterface):
         return posts
 
 
-TIMELINE_CAPACITY = 10
-
-
 class TimelineStorageDatabase(gateways.TimelineStorageInterface):
+    timeline_capacity = 10
+
     def __init__(self, db: AsyncIOMotorDatabase) -> None:
         self.db = db
 
     async def read(self) -> Timeline:
-        timeline = Timeline(TIMELINE_CAPACITY)
+        timeline = Timeline(self.timeline_capacity)
         cursor = self.db["timeline"].find()
         posts = await cursor_to_posts(cursor)
         timeline.init_posts(posts)
