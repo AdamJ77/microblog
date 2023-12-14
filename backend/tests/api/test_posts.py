@@ -1,6 +1,6 @@
 from backend.api.routers import posts
-from pymongo.collection import Collection
 from datetime import datetime
+import pytest
 
 ADD_POST_REQUEST = {
     "data": {
@@ -18,26 +18,18 @@ ADD_POST_REQUEST = {
 }
 
 
-def insert_example_post(collection: Collection, post, count=1):
+@pytest.fixture
+def insert_example_posts(request, db, post):
     from backend.api.database.adapters import post_to_doc
+    from pytest import Mark
 
+    marker: Mark = request.node.get_closest_marker("count")
     post_doc = post_to_doc(post)
-    for _ in range(count):
-        collection.insert_one(post_doc.copy())
 
-
-def test_get_posts_no_posts(client, db, post):
-    insert_example_post(db["posts"], post)
-    insert_example_post(db["timeline"], post)
-
-    response = client.get("/posts/?start=0&count=0")
-    assert response.status_code == 200
-    response_content = response.json()
-    assert response_content["links"] == {
-        "self": "http://microblog.com/posts?start=0&count=0",
-        "next": "http://microblog.com/posts?start=0&count=0",
-    }
-    assert response_content["data"] == []
+    for collection in marker.kwargs:
+        count = marker.kwargs[collection]
+        for _ in range(count):
+            db[collection].insert_one(post_doc.copy())
 
 
 def check_get_posts_response(response, check_date=True):
@@ -66,18 +58,31 @@ def check_get_posts_response(response, check_date=True):
             assert m["src"] == "http://microblog.com/posts/13/image1.jpg"
 
 
-def test_get_posts_from_timeline_and_storage(client, db, post):
-    insert_example_post(db["posts"], post)
-    insert_example_post(db["timeline"], post)
+@pytest.mark.count(post_storage=1, timeline=1)
+@pytest.mark.usefixtures("insert_example_posts")
+def test_get_posts_no_posts(client):
+    response = client.get("/posts/?start=0&count=0")
+    assert response.status_code == 200
+    response_content = response.json()
+    assert response_content["links"] == {
+        "self": "http://microblog.com/posts?start=0&count=0",
+        "next": "http://microblog.com/posts?start=0&count=0",
+    }
+    assert response_content["data"] == []
 
+
+@pytest.mark.count(post_storage=1, timeline=1)
+@pytest.mark.usefixtures("insert_example_posts")
+def test_get_posts_from_timeline_and_storage(client):
     response = client.get("/posts/?start=0&count=2")
     assert response.status_code == 200
     response_content = response.json()
     check_get_posts_response(response_content)
 
 
-def test_get_posts_from_timeline_only(client, db, post):
-    insert_example_post(db["timeline"], post, 2)
+@pytest.mark.count(timeline=2)
+@pytest.mark.usefixtures("insert_example_posts")
+def test_get_posts_from_timeline_only(client):
     response = client.get("/posts/?start=0&count=2")
     response_content = response.json()
     data = response_content["data"]
