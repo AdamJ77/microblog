@@ -18,17 +18,16 @@ export default function LoginForm() {
       console.log(key, val);
     });
 
-    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_SERVER_URL}/auth/login`,
+      {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      }
+    );
 
     if (response.status !== 200) return;
-
-    const data = await response.json();
-
-    localStorage.setItem("token", data.token);
-    // document.cookie = `Authorization=Bearer ${data.token}; path=/; secure; SameSite=None; HttpOnly`;
 
     navigate("/");
   };

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Request, HTTPException, Depends
 # from starlette.requests import Request
 
+from fastapi.responses import JSONResponse
 from backend.api.logger import LoggingRoute
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 users = [
@@ -20,15 +20,12 @@ users = [
     },
 ]
 
+# to trzeba jakos sensowniej trzymac
 SECRET_KEY = "your-secret-key"
 
-# Algorithm to use for JWT
 ALGORITHM = "HS256"
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
-# Function to create a JWT token
 def create_jwt_token(data: dict):
     to_encode = data.copy()
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
@@ -37,12 +34,12 @@ def create_jwt_token(data: dict):
 
 router = APIRouter(
     route_class=LoggingRoute,
-    prefix='/login',
-    tags=['Login']
+    prefix='/auth',
+    tags=['Auth']
 )
 
 
-@router.post("/")
+@router.post("/login")
 async def login(request: Request):
     data = await request.form()
 
@@ -57,38 +54,53 @@ async def login(request: Request):
         if login == user["login"] and password == user["password"]:
             found_user = user
             break
-    
+
     if not found_user:
         raise HTTPException(status_code=401)
 
-    token_data = { "id": found_user["id"] }
+    token_data = {
+        "id": found_user["id"]
+    }
     access_token = create_jwt_token(token_data)
 
-    return {"token": access_token}
+    response = JSONResponse(content={"token": access_token})
+    response.set_cookie(key="token", value=access_token, httponly=True, samesite=None)
+
+    return response
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_current_user(request: Request):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+
     try:
+        token = request.cookies.get("token")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         id: str = payload.get("id")
         if id is None:
             raise credentials_exception
-    except JWTError:
+    # except JWTError:
+    # jakims tajemniczym errorem rzuca
+    except Exception:
         raise credentials_exception
     return id
 
 
-@router.get("/test")
+@router.get("/protected")
 async def login_test(user_id: str = Depends(get_current_user)):
     found_name = None
     for user in users:
         if user["id"] == user_id:
             found_name = user["name"]
             break
-        
+
     return {"name": found_name}
+
+
+@router.post("/logout")
+async def logout(response: JSONResponse):
+    response.delete_cookie("token", path="/", secure=True, samesite="None")
+    return { "message": "successful logout" }

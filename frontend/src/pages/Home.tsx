@@ -1,25 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LeftBar from "../components/home/LeftBar/LeftBar";
 import MainSection from "../components/home/Main/MainSection";
 import RightBar from "../components/home/RightBar/RightBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  fetch(`${process.env.REACT_APP_SERVER_URL}/login/test`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-    // credentials: "include",
-  })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/protected`, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.status !== 200) navigate("/login");
+        return res.json();
+      })
+      .then((data) => console.log(data))
+      .catch(() => navigate("/login"));
+  }, []);
+
+  const handleLogout = () => {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err))
+      .finally(() => navigate("/login"));
+  };
 
   return (
-    <div style={{ display: "flex" }}>
-      <LeftBar />
-      <MainSection />
-      <RightBar />
-    </div>
+    <>
+      <button onClick={() => handleLogout()}>logout</button>
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <MainSection />
+        <RightBar />
+      </div>
+    </>
   );
 }
