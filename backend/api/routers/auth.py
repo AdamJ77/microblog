@@ -4,6 +4,7 @@ from fastapi import APIRouter, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from backend.api.logger import LoggingRoute
 from jose import JWTError, jwt
+from datetime import datetime, timedelta
 
 users = [
     {
@@ -28,6 +29,8 @@ ALGORITHM = "HS256"
 
 def create_jwt_token(data: dict):
     to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=10)
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -100,7 +103,20 @@ async def login_test(user_id: str = Depends(get_current_user)):
     return {"name": found_name}
 
 
+@router.post("/refresh")
+async def logout(response: JSONResponse, user_id: str = Depends(get_current_user)):
+    token_data = {
+        "id": user_id
+    }
+    access_token = create_jwt_token(token_data)
+
+    response = JSONResponse(content={"token": access_token})
+    response.set_cookie(key="token", value=access_token, httponly=True, samesite=None)
+
+    return response
+
+
 @router.post("/logout")
-async def logout(response: JSONResponse):
+async def logout(response: JSONResponse, _ = Depends(get_current_user)):
     response.delete_cookie("token", path="/", secure=True, samesite="None")
     return { "message": "successful logout" }

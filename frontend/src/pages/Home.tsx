@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { startTransition, useEffect } from "react";
 import LeftBar from "../components/home/LeftBar/LeftBar";
 import MainSection from "../components/home/Main/MainSection";
 import RightBar from "../components/home/RightBar/RightBar";
@@ -30,9 +30,16 @@ export default function Home() {
       .finally(() => navigate("/login"));
   };
 
+  const handleProfileClick = () => {
+    startTransition(() => {
+      navigate("/profile");
+    });
+  };
+
   return (
     <>
       <button onClick={() => handleLogout()}>logout</button>
+      <button onClick={() => handleProfileClick()}>profile</button>
       <div style={{ display: "flex" }}>
         <LeftBar />
         <MainSection />
