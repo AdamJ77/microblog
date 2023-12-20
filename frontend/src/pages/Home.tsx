@@ -16,7 +16,7 @@ export default function Home() {
         return res.json();
       })
       .then((data) => console.log(data))
-      .catch(() => startTransition(() => navigate("/login")));
+      .catch(() => navigate("/login"));
   }, []);
 
   const handleLogout = () => {
@@ -30,16 +30,20 @@ export default function Home() {
       .finally(() => navigate("/login"));
   };
 
-  const handleProfileClick = () => {
-    startTransition(() => {
-      navigate("/profile");
-    });
-  };
-
   return (
     <>
-      <button onClick={() => handleLogout()}>logout</button>
-      <button onClick={() => handleProfileClick()}>profile</button>
+      <button
+        onClick={() => handleLogout()}
+        style={{
+          border: "none",
+          color: "white",
+          padding: "10px 50px",
+          backgroundColor: "red",
+          margin: "20px",
+        }}
+      >
+        logout
+      </button>
       <div style={{ display: "flex" }}>
         <LeftBar />
         <MainSection />

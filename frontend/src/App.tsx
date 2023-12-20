@@ -35,10 +35,26 @@ export default function App() {
     );
   };
 
-  const authorize = (Component: ComponentType) => {
+  const authorize = (
+    Component: React.LazyExoticComponent<() => JSX.Element>
+  ) => {
+    const suspenseStyles: CSSProperties = {
+      width: "100%",
+      height: "100vh",
+      backgroundColor: "var(--primary-color)",
+    };
+
     return (
       <AuthContextProvider>
-        <Component />
+        <Suspense
+          fallback={
+            <div style={suspenseStyles}>
+              <Loading text="" />
+            </div>
+          }
+        >
+          <Component />
+        </Suspense>
       </AuthContextProvider>
     );
   };
