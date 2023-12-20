@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request, HTTPException, Depends
 
 from fastapi.responses import JSONResponse
 from backend.api.logger import LoggingRoute
-from jose import JWTError, jwt
+from jose import jwt
 from datetime import datetime, timedelta
 
 users = [
@@ -29,7 +29,7 @@ ALGORITHM = "HS256"
 
 def create_jwt_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=10)
+    expire = datetime.utcnow() + timedelta(seconds=6)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
@@ -50,7 +50,8 @@ async def login(request: Request):
     password = data.get("password")
 
     if not login or not password:
-        raise HTTPException(status_code=400, detail="Login and password are required")
+        raise HTTPException(status_code=400,
+                            detail="Login and password are required")
 
     found_user = None
     for user in users:
@@ -67,7 +68,8 @@ async def login(request: Request):
     access_token = create_jwt_token(token_data)
 
     response = JSONResponse(content={"token": access_token})
-    response.set_cookie(key="token", value=access_token, httponly=True, samesite=None)
+    response.set_cookie(key="token", value=access_token, httponly=True,
+                        samesite=None)
 
     return response
 
@@ -93,7 +95,7 @@ def get_current_user(request: Request):
 
 
 @router.get("/protected")
-async def login_test(user_id: str = Depends(get_current_user)):
+async def protected(user_id: str = Depends(get_current_user)):
     found_name = None
     for user in users:
         if user["id"] == user_id:
@@ -104,19 +106,59 @@ async def login_test(user_id: str = Depends(get_current_user)):
 
 
 @router.post("/refresh")
-async def logout(response: JSONResponse, user_id: str = Depends(get_current_user)):
+async def refresh(response: JSONResponse,
+                  user_id: str = Depends(get_current_user)):
     token_data = {
         "id": user_id
     }
     access_token = create_jwt_token(token_data)
 
     response = JSONResponse(content={"token": access_token})
-    response.set_cookie(key="token", value=access_token, httponly=True, samesite=None)
+    response.set_cookie(key="token", value=access_token, httponly=True,
+                        samesite=None)
 
     return response
 
 
 @router.post("/logout")
-async def logout(response: JSONResponse, _ = Depends(get_current_user)):
+async def logout(response: JSONResponse,
+                 user_id: str = Depends(get_current_user)):
     response.delete_cookie("token", path="/", secure=True, samesite="None")
-    return { "message": "successful logout" }
+    return {
+        "message": "successful logout"
+    }
+
+
+@router.post("/signup")
+async def signup(request: Request):
+    data = await request.form()
+
+    login = data.get("login")
+    password = data.get("password")
+
+    if not login or not password:
+        raise HTTPException(status_code=400,
+                            detail="Login and password are required")
+
+    from random import randint
+
+    id = str(randint(10 ** 5, 10 ** 6))
+    created_user = {
+        "id": id,
+        "name": login,
+        "login": login,
+        "password": password
+    }
+
+    users.append(created_user)
+
+    token_data = {
+        "id": id
+    }
+    access_token = create_jwt_token(token_data)
+
+    response = JSONResponse(content={"id": id})
+    response.set_cookie(key="token", value=access_token, httponly=True,
+                        samesite=None)
+
+    return response

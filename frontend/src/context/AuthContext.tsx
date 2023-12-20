@@ -16,31 +16,33 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
 
   const refreshTokenIntervalRef = useRef<any | null>(null);
 
-  const refreshToken = async () => {
-    try {
-      console.log("Trying to refresh the token...");
-
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/auth/refresh`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-
-      if (response.status !== 200) {
-        navigate("/login");
-        return;
-      }
-
-      const data = await response.json();
-      console.log("Token refreshed successfully.", data);
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-    }
-  };
-
   useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        console.log("Trying to refresh the token...");
+
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/auth/refresh`,
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.status !== 200) {
+          navigate("/login");
+          return;
+        }
+
+        const data = await response.json();
+        console.log("Token refreshed successfully.", data);
+      } catch (error) {
+        console.error("Error refreshing token:", error);
+      }
+    };
+
+    refreshToken();
+
     refreshTokenIntervalRef.current = setInterval(refreshToken, 5 * 1000);
 
     return () => {
@@ -48,7 +50,7 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
         clearInterval(refreshTokenIntervalRef.current);
       }
     };
-  }, []);
+  }, [navigate]);
 
   return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 };

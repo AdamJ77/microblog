@@ -57,7 +57,28 @@ export default function SignupForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isValidPassword = form.password === form.confirmPassword;
-    console.log(form, isValidPassword);
+
+    if (!isValidPassword) alert("Passwords don't match.");
+
+    const formData = new FormData(e.currentTarget);
+
+    formData.delete("avatar");
+    formData.delete("confirmPassword");
+
+    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/signup`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    })
+      .then((res) => {
+        if (res.status !== 200) throw new Error();
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        navigate("/");
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

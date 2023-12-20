@@ -16,7 +16,7 @@ export default function Home() {
         return res.json();
       })
       .then((data) => console.log(data))
-      .catch(() => navigate("/login"));
+      .catch(() => startTransition(() => navigate("/login")));
   }, []);
 
   const handleLogout = () => {
