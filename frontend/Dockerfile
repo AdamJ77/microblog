@@ -2,6 +2,8 @@ FROM node:14-alpine
 
 WORKDIR /frontend
 COPY package*.json ./
+RUN pwd
+RUN ls -l
 RUN npm install
 COPY . .
 RUN npm run build
