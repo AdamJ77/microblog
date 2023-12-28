@@ -1,5 +1,4 @@
 from testcontainers.mongodb import MongoDbContainer
-from pymongo.database import Database
 from backend.domain import entities
 from pathlib import Path
 import pytest
@@ -9,12 +8,6 @@ import pytest
 def mongodb_container():
     with MongoDbContainer() as mongo:
         yield mongo
-
-
-@pytest.fixture
-def db(request, mongodb_container) -> Database:
-    client = mongodb_container.get_connection_client()
-    return getattr(client, request.node.name)
 
 
 @pytest.fixture(autouse=True)
@@ -33,7 +26,7 @@ def media():
 
 @pytest.fixture
 def post_author():
-    return entities.User(id="0", name="Author")
+    return entities.User(id="213", name="Greg")
 
 
 @pytest.fixture

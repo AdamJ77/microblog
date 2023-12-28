@@ -18,7 +18,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
     "next": "http://microblog.com/posts?start=2&count=5"
   },
   "data": [{
-    "id": "7",
+    "id": "65773e12ab916aacd90d2cf5",
     "type": "posts",
     "attributes": {
       "author": {
@@ -35,7 +35,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
       "media": []
     }
   }, {
-    "id": "13",
+    "id": "1f7c3713cb9c68b7d98d2c63",
     "type": "posts",
     "attributes": {
       "author": {
@@ -69,11 +69,10 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
     "type": "posts",
     "attributes": {
       "body": "Bajojajo",
-      "media": [
-        "<Some link to uploaded image>",
-        "<Some link to uploaded image>",
-        "<Some link to uploaded image>"
-      ]
+      "media": [{
+          "type": "image",
+          "src": "http://microblog.com/posts/13/image1.jpg"
+      }]
     }
   }
 }

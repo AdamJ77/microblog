@@ -1,5 +1,6 @@
-from fastapi import APIRouter
-from backend.domain import use_cases, gateways
+from fastapi import APIRouter, HTTPException
+from starlette.requests import Request
+from backend.domain import use_cases
 
 AVATAR_BASE_URL = "http://microblog.com/users/avatars/"
 
@@ -9,23 +10,20 @@ router = APIRouter(
 )
 
 
-class PostStorageAdapter(gateways.PostStorageInterface):
-    pass
-
-
-class TimelineStorageAdapter(gateways.TimelineStorageInterface):
-    pass
-
-
-db = PostStorageAdapter()
-timeline = TimelineStorageAdapter()
+def get_datetime_str(datetime):
+    return datetime.strftime(
+        f"%Y-%m-%dT%H:%M:%S.{datetime.microsecond // 1000:03}Z"
+    )
 
 
 @router.get("/")
-async def get_posts(start: int, count: int):
+async def get_posts(request: Request, start: int, count: int):
     next = start + count
-    posts = use_cases.get_subset_of_posts(
-        db, timeline, start=start, count=count
+    posts = await use_cases.get_subset_of_posts(
+        request.app.post_storage,
+        request.app.timeline,
+        start=start,
+        count=count,
     )
     data = []
     for p in posts:
@@ -36,9 +34,7 @@ async def get_posts(start: int, count: int):
                 "avatar": {"src": AVATAR_BASE_URL + p.author.name + ".png"},
             },
         }
-        datetime = (
-            str(p.datetime.date()) + "T" + str(p.datetime.time()) + ".000Z"
-        )
+        datetime = get_datetime_str(p.datetime)
         media = [{"type": m.type.name.lower(), "src": m.src} for m in p.media]
         data.append(
             {
@@ -59,3 +55,33 @@ async def get_posts(start: int, count: int):
         },
         "data": data,
     }
+
+
+@router.post("/")
+async def add_post(request: Request):
+    from backend.domain.entities import Post, User, Media
+    from datetime import datetime
+
+    body = await request.json()
+    data = body["data"]
+    if data["type"] != "posts":
+        raise HTTPException(
+            status_code=400, detail=f"Invalid item type: {data['type']}"
+        )
+
+    author = User("213", "Greg")
+    media = [
+        Media(Media.Type[m["type"].upper()], m["src"])
+        for m in data["attributes"]["media"]
+    ]
+    post = Post(
+        id=None,
+        text=data["attributes"]["body"],
+        author=author,
+        media=media,
+        date=datetime.now(),
+    )
+    await use_cases.add_post(
+        request.app.post_storage, request.app.timeline, post
+    )
+    return {"id": "0"}
