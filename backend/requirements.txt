@@ -1,5 +1,6 @@
 fastapi
 pydantic
+motor
 uvicorn
 setuptools-scm
 httpx

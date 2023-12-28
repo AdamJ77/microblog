@@ -3,8 +3,11 @@ import pytest
 
 
 @pytest.fixture
-def client() -> TestClient:
+def client(monkeypatch, mongodb_container) -> TestClient:
     from backend.api.app import create_app
 
+    monkeypatch.setenv(
+        'DB_CONNECTION_URL', mongodb_container.get_connection_url())
     app = create_app()
-    return TestClient(app)
+    with TestClient(app) as testclient:
+        yield testclient

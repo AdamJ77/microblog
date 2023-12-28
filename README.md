@@ -28,7 +28,7 @@ Swagger UI will be available @ http://127.0.0.1:8000/docs
           "avatar": {
             "src": "http://microblog.com/users/avatars/Greg.png"
           }
-        }  
+        }
       },
       "body": "Bajojajo",
       "created": "2023-04-20T18:34:59.000Z",

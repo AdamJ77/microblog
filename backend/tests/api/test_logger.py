@@ -7,15 +7,12 @@ def test_logger(testdir: Path, caplog, client):
     assert response.status_code == 200
     assert response.json() == {'msg': 'Hello world!'}
 
-    assert len(caplog.records) == 1
-
     logs_path = testdir/'microblog-api.log'
     assert logs_path.exists()
 
-    log = json.load(logs_path)
-    assert log['@timestamp']
-    assert log['log.level'] == 'info'
-    assert log['message'] == \
+    log = caplog.records[0].__dict__
+    assert log['levelname'] == 'INFO'
+    assert log['msg'] == \
         'Request from testclient:50000 to http://testserver/hello/ handled'
 
     request = log.get('request')
@@ -32,5 +29,5 @@ def test_logger(testdir: Path, caplog, client):
     assert response['media_type'] == 'application/json'
     assert response['status_code'] == 200
     assert response['duration'] > 0
-    parsed_body = json.loads(response['body'][2:-1].encode())
+    parsed_body = json.loads(response['body'])
     assert parsed_body == {'msg': 'Hello world!'}
