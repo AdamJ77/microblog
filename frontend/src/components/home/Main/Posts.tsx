@@ -7,6 +7,7 @@ export default function Posts() {
   const { posts, isLoading } = useFetchPosts();
 
   if (isLoading) return <div>loading...</div>;
+  console.log(posts);
 
   return (
     <div className={styles.posts}>

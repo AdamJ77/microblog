@@ -3,6 +3,7 @@ import { AVAILABLE_IMAGE_EXTENSIONS, DEFAULT_AVATAR } from "../../constants";
 import styles from "./style/SignupForm.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { uploadSingleFile } from "../../utils/uploadFiles";
 
 export default function SignupForm() {
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
@@ -63,11 +64,14 @@ export default function SignupForm() {
 
     const formData = new FormData(e.currentTarget);
 
+    const file = formData.get("avatar") as File;
+    const url = await uploadSingleFile(file)!;
+
     const body = {
       login: formData.get("login"),
       password: formData.get("password"),
       username: formData.get("username"),
-      avatar: "http://avatar.com/ufgyuerwgfyur",
+      avatar: url,
     };
 
     try {
