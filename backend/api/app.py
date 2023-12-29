@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.api.database.db import Database
 from backend.api.database import adapters
 from backend.api.logger import init_logger
-from backend.api.routers import hello, posts
+from backend.api.routers import hello, posts, auth
 
 
 @asynccontextmanager
@@ -34,6 +34,7 @@ def create_app():
     # including routers
     app.include_router(hello.router)
     app.include_router(posts.router)
+    app.include_router(auth.router)
 
     return app
 

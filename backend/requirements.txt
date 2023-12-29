@@ -5,3 +5,5 @@ uvicorn
 setuptools-scm
 httpx
 ecs-logging
+python-jose
+python-dotenv
