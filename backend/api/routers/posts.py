@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from starlette.requests import Request
 from backend.domain import use_cases
+from backend.api.routers.auth import get_current_user
+from bson import ObjectId
 
 AVATAR_BASE_URL = "http://microblog.com/users/avatars/"
 
@@ -58,7 +60,7 @@ async def get_posts(request: Request, start: int, count: int):
 
 
 @router.post("/")
-async def add_post(request: Request):
+async def add_post(request: Request, user_id: str = Depends(get_current_user)):
     from backend.domain.entities import Post, User, Media
     from datetime import datetime
 
@@ -69,7 +71,11 @@ async def add_post(request: Request):
             status_code=400, detail=f"Invalid item type: {data['type']}"
         )
 
-    author = User("213", "Greg")
+    db = request.app.database
+    user = await db.users.find_one({"_id": ObjectId(user_id)})
+    name = user.get("username", "")
+    author = User(user_id, name)
+
     media = [
         Media(Media.Type[m["type"].upper()], m["src"])
         for m in data["attributes"]["media"]
