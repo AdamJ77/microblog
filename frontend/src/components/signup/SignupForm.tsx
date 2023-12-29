@@ -66,6 +66,7 @@ export default function SignupForm() {
     const body = {
       login: formData.get("login"),
       password: formData.get("password"),
+      username: formData.get("username"),
       avatar: "http://avatar.com/ufgyuerwgfyur",
     };
 
@@ -75,7 +76,6 @@ export default function SignupForm() {
         body
       );
       if (data.status !== 200) throw new Error();
-      console.log(data);
     } catch (e) {
       console.error(e);
     }
@@ -115,6 +115,14 @@ export default function SignupForm() {
           />
         </div>
         <div style={{ width: "60%" }}>
+          <input
+            type="text"
+            name="username"
+            placeholder="username"
+            className={styles.input}
+            required
+            onChange={handleFormChange}
+          />
           <input
             type="text"
             name="login"

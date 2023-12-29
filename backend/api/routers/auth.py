@@ -141,6 +141,7 @@ async def logout(request: Request, user_id: str = Depends(get_current_user)):
 async def signup(request: Request):
     data = await request.json()
 
+    username = data.get("username")
     login = data.get("login")
     password = data.get("password")
     avatar = data.get("avatar")
@@ -155,6 +156,7 @@ async def signup(request: Request):
         "login": login,
         "password": hashlib.sha256(password.encode()).hexdigest(),
         "avatar": avatar,
+        "username": username
     })
 
     user_id = str(result.inserted_id)
