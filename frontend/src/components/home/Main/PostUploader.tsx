@@ -5,6 +5,7 @@ import {
   AVAILABLE_IMAGE_EXTENSIONS,
   AVAILABLE_VIDEO_EXTENSIONS,
 } from "../../../constants";
+import { uploadMultipleFiles } from "../../../utils/uploadFiles";
 
 export default function PostUploader() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -39,8 +40,15 @@ export default function PostUploader() {
     alt: "Elon Musk",
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const urls = await uploadMultipleFiles(selectedFiles);
+    console.log(urls);
+  };
+
   return (
-    <form className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={handleSubmit}>
       <div className={styles.avatar}>
         <Avatar image={me.image} alt={me.alt} />
       </div>
@@ -54,6 +62,7 @@ export default function PostUploader() {
         <div>
           {selectedFiles.map((file, index) => (
             <button
+              key={index}
               title="remove"
               className={styles["uploaded-file-btn"]}
               onClick={(e) => {
@@ -97,13 +106,7 @@ export default function PostUploader() {
           />
         </label>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-        className={styles.button}
-        type="submit"
-      >
+      <button className={styles.button} type="submit">
         tweet
       </button>
     </form>

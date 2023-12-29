@@ -1,12 +1,15 @@
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from backend.api.database.db import Database
 from backend.api.database import adapters
 from backend.api.logger import init_logger
-from backend.api.routers import hello, posts, auth
+from backend.api.routers import hello, posts, auth, static_files
+from backend.api.routers.static_files import STATIC_FOLDER_NAME
 
 
 @asynccontextmanager
@@ -31,10 +34,15 @@ def create_app():
         allow_headers=["*"],
     )
 
+    os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
+    app.mount(
+        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
+
     # including routers
     app.include_router(hello.router)
     app.include_router(posts.router)
     app.include_router(auth.router)
+    app.include_router(static_files.router)
 
     return app
 
