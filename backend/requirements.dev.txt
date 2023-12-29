@@ -1,4 +1,5 @@
 pytest
+pytest-asyncio
 freezegun
 testcontainers
 pymongo
