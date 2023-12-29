@@ -1,8 +1,9 @@
-import React, { lazy, Suspense, ComponentType, CSSProperties } from "react";
+import React, { lazy, Suspense, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 import "react-photo-view/dist/react-photo-view.css";
 import AuthContextProvider from "./context/AuthContext";
+import { useAppContext } from "./context/AppContext";
 
 const Home = lazy(() => import("./pages/Home"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -11,6 +12,12 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 
 export default function App() {
+  const { isLoading } = useAppContext();
+
+  if (isLoading) {
+    return <Loading text="" />;
+  }
+
   const SuspenseWrapper = ({
     lazyComponent,
   }: {

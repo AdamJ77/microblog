@@ -1,33 +1,30 @@
-import React, { startTransition, useEffect } from "react";
+import React from "react";
 import LeftBar from "../components/home/LeftBar/LeftBar";
 import MainSection from "../components/home/Main/MainSection";
 import RightBar from "../components/home/RightBar/RightBar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAppContext } from "../context/AppContext";
+import useCheckToken from "../hooks/useCheckToken";
 
 export default function Home() {
+  useCheckToken();
+  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/protected`, {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.status !== 200) navigate("/login");
-        return res.json();
-      })
-      .then((data) => console.log(data))
-      .catch(() => navigate("/login"));
-  }, []);
+  const handleLogout = async () => {
+    await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/auth/logout`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+        },
+      }
+    );
 
-  const handleLogout = () => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.error(err))
-      .finally(() => navigate("/login"));
+    tokenRef.current = null;
+    navigate("/login");
   };
 
   return (
