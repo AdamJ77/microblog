@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AVAILABLE_IMAGE_EXTENSIONS, DEFAULT_AVATAR } from "../../constants";
 import styles from "./style/SignupForm.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function SignupForm() {
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
@@ -54,7 +55,7 @@ export default function SignupForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isValidPassword = form.password === form.confirmPassword;
 
@@ -62,23 +63,22 @@ export default function SignupForm() {
 
     const formData = new FormData(e.currentTarget);
 
-    formData.delete("avatar");
-    formData.delete("confirmPassword");
+    const body = {
+      login: formData.get("login"),
+      password: formData.get("password"),
+      avatar: "http://avatar.com/ufgyuerwgfyur",
+    };
 
-    fetch(`${process.env.REACT_APP_SERVER_URL}/auth/signup`, {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    })
-      .then((res) => {
-        if (res.status !== 200) throw new Error();
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        navigate("/");
-      })
-      .catch((err) => console.error(err));
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/signup`,
+        body
+      );
+      if (data.status !== 200) throw new Error();
+      console.log(data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
