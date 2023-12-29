@@ -28,24 +28,10 @@ export default function Home() {
   };
 
   return (
-    <>
-      <button
-        onClick={() => handleLogout()}
-        style={{
-          border: "none",
-          color: "white",
-          padding: "10px 50px",
-          backgroundColor: "red",
-          margin: "20px",
-        }}
-      >
-        logout
-      </button>
-      <div style={{ display: "flex" }}>
-        <LeftBar />
-        <MainSection />
-        <RightBar />
-      </div>
-    </>
+    <div style={{ display: "flex" }}>
+      <LeftBar />
+      <MainSection />
+      <RightBar />
+    </div>
   );
 }
