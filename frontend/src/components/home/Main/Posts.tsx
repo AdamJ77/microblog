@@ -4,16 +4,16 @@ import styles from "./styles/Posts.module.css";
 import useFetchPosts from "../../../hooks/useFetchPosts";
 
 export default function Posts() {
-  const { posts, isLoading } = useFetchPosts();
+  const { posts, isLoading, ref, hasMore } = useFetchPosts();
 
   if (isLoading) return <div>loading...</div>;
-  console.log(posts);
 
   return (
     <div className={styles.posts}>
       {posts.map((post, index) => (
         <Post key={index} post={post} />
       ))}
+      {hasMore && <div ref={ref} />}
     </div>
   );
 }
