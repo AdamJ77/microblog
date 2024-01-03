@@ -1,6 +1,7 @@
 from backend.api.routers import posts
 from datetime import datetime
 import pytest
+from backend.api.routers.auth import create_jwt_token
 
 ADD_POST_REQUEST = {
     "data": {
@@ -15,6 +16,12 @@ ADD_POST_REQUEST = {
             ],
         },
     }
+}
+
+token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+
+auth_header = {
+    "Authorization": f"Bearer {token}"
 }
 
 
@@ -97,7 +104,8 @@ def test_get_posts_not_enough_posts(client):
 
 
 def test_get_and_add_post(client):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -108,7 +116,8 @@ def test_get_and_add_post(client):
 
 
 def test_add_and_get_post_from_timeline_only(client, monkeypatch):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
     assert response.status_code == 200
 
     # Ensure that posts cannot be retrieved from post storage (timeline only)
@@ -121,7 +130,7 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch):
 
 def test_add_post_invalid_type(client):
     body = {"data": {"type": "bananas"}}
-    response = client.post("/posts/", json=body)
+    response = client.post("/posts/", json=body, headers=auth_header)
     assert response.status_code == 400
 
 
