@@ -45,6 +45,14 @@ def post(post_author, media):
     )
 
 
+@pytest.fixture(autouse=True)
+def setup_event_loop():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    yield loop
+    loop.close()
+
+
 async def async_get_user(client):
     db = client.app.database
 

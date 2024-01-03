@@ -104,6 +104,7 @@ def test_get_posts_not_enough_posts(client):
     assert len(data) == 0
 
 
+@pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
 def test_get_and_add_post(client, get_user):
     auth_header = create_auth_header(get_user)
@@ -118,6 +119,7 @@ def test_get_and_add_post(client, get_user):
     check_get_posts_response(response_content, check_date=False)
 
 
+@pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
 def test_add_and_get_post_from_timeline_only(client, monkeypatch,
                                              get_user):
@@ -134,6 +136,7 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch,
     check_get_posts_response(response.json(), check_date=False)
 
 
+@pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
 def test_add_post_invalid_type(client, get_user):
     body = {"data": {"type": "bananas"}}
