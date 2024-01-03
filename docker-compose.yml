@@ -1,14 +1,14 @@
 version: "3.8"
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "2137:2137"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "2137:2137"
+    depends_on:
+      - backend
 
   backend:
     build:
@@ -21,7 +21,7 @@ services:
     environment:
       - DB_CONNECTION_URL=mongodb://mongodb:27017/mydatabase # Change "mydatabase"
     volumes:
-      - pis_backend_files:/contest_platform/backend/uploads
+      - pis_backend_files:/microblog/backend/uploads
 
   mongodb:
     image: mongo
