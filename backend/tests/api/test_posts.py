@@ -1,7 +1,6 @@
 from backend.api.routers import posts
 from datetime import datetime
 import pytest
-import asyncio
 from backend.api.routers.auth import create_jwt_token
 
 ADD_POST_REQUEST = {
@@ -107,52 +106,42 @@ def test_get_posts_not_enough_posts(client):
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
-def test_get_and_add_post(client, get_user):
-    async def async_test():
-        auth_header = create_auth_header(get_user)
-        response = client.post("/posts/", json=ADD_POST_REQUEST,
-                               headers=auth_header)
-        assert response.status_code == 200
-        assert response.json() == {"id": "0"}
+async def test_get_and_add_post(client, get_user):
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
+    assert response.status_code == 200
+    assert response.json() == {"id": "0"}
 
-        response = client.get("/posts/?start=0&count=2")
-        assert response.status_code == 200
-        response_content = response.json()
-        check_get_posts_response(response_content, check_date=False)
-
-    asyncio.run(async_test())
+    response = client.get("/posts/?start=0&count=2")
+    assert response.status_code == 200
+    response_content = response.json()
+    check_get_posts_response(response_content, check_date=False)
 
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
-def test_add_and_get_post_from_timeline_only(client, monkeypatch,
-                                             get_user):
-    async def async_test():
-        auth_header = create_auth_header(get_user)
-        response = client.post("/posts/", json=ADD_POST_REQUEST,
-                               headers=auth_header)
-        assert response.status_code == 200
+async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
+                                                   get_user):
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
+    assert response.status_code == 200
 
-        monkeypatch.setattr(client.app, "post_storage", None)
+    monkeypatch.setattr(client.app, "post_storage", None)
 
-        response = client.get("/posts/?start=0&count=1")
-        assert response.status_code == 200
-        check_get_posts_response(response.json(), check_date=False)
-
-    asyncio.run(async_test())
+    response = client.get("/posts/?start=0&count=1")
+    assert response.status_code == 200
+    check_get_posts_response(response.json(), check_date=False)
 
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("get_user")
-def test_add_post_invalid_type(client, get_user):
-    async def async_test():
-        body = {"data": {"type": "bananas"}}
-        auth_header = create_auth_header(get_user)
-        response = client.post("/posts/", json=body,
-                               headers=auth_header)
-        assert response.status_code == 400
-
-    asyncio.run(async_test())
+async def test_add_post_invalid_type(client, get_user):
+    body = {"data": {"type": "bananas"}}
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=body, headers=auth_header)
+    assert response.status_code == 400
 
 
 def test_get_datetime_str_zero_microseconds():
