@@ -2,6 +2,7 @@ from testcontainers.mongodb import MongoDbContainer
 from backend.domain import entities
 from pathlib import Path
 import pytest
+import hashlib
 
 
 @pytest.fixture(scope="session")
@@ -41,3 +42,17 @@ def post(post_author, media):
         media=[media],
         date=post_date,
     )
+
+
+@pytest.fixture
+def get_user(client):
+    db = client.app.database
+
+    id = db.users.insert_one({
+        "login": "fake_login",
+        "password": hashlib.sha256("fake_password".encode()).hexdigest(),
+        "avatar": "http://microblog/avatar.jpg",
+        "username": "user1"
+    }).inserted_id
+
+    return str(id)
