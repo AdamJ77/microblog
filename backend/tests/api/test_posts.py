@@ -111,7 +111,7 @@ def test_get_and_add_post(client, get_user):
     async def async_test():
         auth_header = create_auth_header(get_user)
         response = client.post("/posts/", json=ADD_POST_REQUEST,
-                            headers=auth_header)
+                               headers=auth_header)
         assert response.status_code == 200
         assert response.json() == {"id": "0"}
 
@@ -119,7 +119,7 @@ def test_get_and_add_post(client, get_user):
         assert response.status_code == 200
         response_content = response.json()
         check_get_posts_response(response_content, check_date=False)
-    
+
     asyncio.run(async_test())
 
 
@@ -130,16 +130,15 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch,
     async def async_test():
         auth_header = create_auth_header(get_user)
         response = client.post("/posts/", json=ADD_POST_REQUEST,
-                            headers=auth_header)
+                               headers=auth_header)
         assert response.status_code == 200
 
-        # Ensure that posts cannot be retrieved from post storage (timeline only)
         monkeypatch.setattr(client.app, "post_storage", None)
 
         response = client.get("/posts/?start=0&count=1")
         assert response.status_code == 200
         check_get_posts_response(response.json(), check_date=False)
-    
+
     asyncio.run(async_test())
 
 
@@ -150,9 +149,9 @@ def test_add_post_invalid_type(client, get_user):
         body = {"data": {"type": "bananas"}}
         auth_header = create_auth_header(get_user)
         response = client.post("/posts/", json=body,
-                            headers=auth_header)
+                               headers=auth_header)
         assert response.status_code == 400
-    
+
     asyncio.run(async_test())
 
 
