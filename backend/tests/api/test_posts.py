@@ -105,7 +105,6 @@ def test_get_posts_not_enough_posts(client):
 
 
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("get_user")
 async def test_get_and_add_post(client, get_user):
     auth_header = create_auth_header(get_user)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
@@ -120,7 +119,6 @@ async def test_get_and_add_post(client, get_user):
 
 
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("get_user")
 async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
                                                    get_user):
     auth_header = create_auth_header(get_user)
@@ -136,7 +134,6 @@ async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
 
 
 @pytest.mark.asyncio
-@pytest.mark.usefixtures("get_user")
 async def test_add_post_invalid_type(client, get_user):
     body = {"data": {"type": "bananas"}}
     auth_header = create_auth_header(get_user)
