@@ -45,14 +45,16 @@ def post(post_author, media):
 
 
 @pytest.fixture
-def get_user(client):
+async def get_user(client):
     db = client.app.database
 
-    id = db.users.insert_one({
+    result = await db.users.insert_one({
         "login": "fake_login",
         "password": hashlib.sha256("fake_password".encode()).hexdigest(),
         "avatar": "http://microblog/avatar.jpg",
         "username": "user1"
-    }).inserted_id
+    })
+
+    id = result.inserted_id
 
     return str(id)
