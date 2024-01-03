@@ -106,8 +106,9 @@ def test_get_posts_not_enough_posts(client):
 
 
 def test_get_and_add_post(client, id: str = get_user):
+    auth_header = create_auth_header(id)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
-                           headers=create_auth_header(id))
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -117,9 +118,11 @@ def test_get_and_add_post(client, id: str = get_user):
     check_get_posts_response(response_content, check_date=False)
 
 
-def test_add_and_get_post_from_timeline_only(client, monkeypatch):
+def test_add_and_get_post_from_timeline_only(client, monkeypatch,
+                                             id: str = get_user):
+    auth_header = create_auth_header(id)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
-                           headers=create_auth_header(id))
+                           headers=auth_header)
     assert response.status_code == 200
 
     # Ensure that posts cannot be retrieved from post storage (timeline only)
@@ -130,10 +133,11 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch):
     check_get_posts_response(response.json(), check_date=False)
 
 
-def test_add_post_invalid_type(client):
+def test_add_post_invalid_type(client, id: str = get_user):
     body = {"data": {"type": "bananas"}}
+    auth_header = create_auth_header(id)
     response = client.post("/posts/", json=body,
-                           headers=create_auth_header(id))
+                           headers=auth_header)
     assert response.status_code == 400
 
 
