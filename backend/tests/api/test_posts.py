@@ -18,7 +18,7 @@ ADD_POST_REQUEST = {
     }
 }
 
-token = create_jwt_token({"id": "d19ffe4b-d2e1-43d9-8679-c8a21309ac22"})
+token = create_jwt_token({"id": "5f4dcc3b5aa765d61d8327de"})
 
 auth_header = {
     "Authorization": f"Bearer {token}"
