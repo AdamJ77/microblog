@@ -2,7 +2,6 @@ from backend.api.routers import posts
 from datetime import datetime
 import pytest
 from backend.api.routers.auth import create_jwt_token
-from backend.tests.conftest import get_user
 
 ADD_POST_REQUEST = {
     "data": {
@@ -105,8 +104,9 @@ def test_get_posts_not_enough_posts(client):
     assert len(data) == 0
 
 
-def test_get_and_add_post(client, id: str = get_user):
-    auth_header = create_auth_header(id)
+@pytest.mark.usefixtures("get_user")
+def test_get_and_add_post(client, get_user):
+    auth_header = create_auth_header(get_user)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
                            headers=auth_header)
     assert response.status_code == 200
@@ -118,9 +118,10 @@ def test_get_and_add_post(client, id: str = get_user):
     check_get_posts_response(response_content, check_date=False)
 
 
+@pytest.mark.usefixtures("get_user")
 def test_add_and_get_post_from_timeline_only(client, monkeypatch,
-                                             id: str = get_user):
-    auth_header = create_auth_header(id)
+                                             get_user):
+    auth_header = create_auth_header(get_user)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
                            headers=auth_header)
     assert response.status_code == 200
@@ -133,9 +134,10 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch,
     check_get_posts_response(response.json(), check_date=False)
 
 
-def test_add_post_invalid_type(client, id: str = get_user):
+@pytest.mark.usefixtures("get_user")
+def test_add_post_invalid_type(client, get_user):
     body = {"data": {"type": "bananas"}}
-    auth_header = create_auth_header(id)
+    auth_header = create_auth_header(get_user)
     response = client.post("/posts/", json=body,
                            headers=auth_header)
     assert response.status_code == 400
