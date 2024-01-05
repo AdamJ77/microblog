@@ -24,7 +24,7 @@ class CustomLogger(logging.Logger):
 
 
 logging.setLoggerClass(CustomLogger)
-log = logging.getLogger(__file__)
+log = logging.getLogger('microblog-api')
 
 
 def log_response(res: Response, req: Request, start_time: float):
@@ -74,7 +74,7 @@ def init_logger(log_level=logging.DEBUG, log_path='microblog-api.log'):
     global formatter
     formatter = ecs_logging.StdlibFormatter()
 
-    logger = logging.getLogger('root')
+    logger = logging.getLogger('microblog-api')
     logger.setLevel(log_level)
 
     handlers = [
