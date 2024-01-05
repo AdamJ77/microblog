@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from starlette.requests import Request
+
+from backend.api.logger import LoggingRoute
 from backend.domain import use_cases
 from backend.api.routers.auth import get_current_user
 from bson import ObjectId
@@ -7,6 +9,7 @@ from bson import ObjectId
 AVATAR_BASE_URL = "http://microblog.com/users/avatars/"
 
 router = APIRouter(
+    route_class=LoggingRoute,
     prefix="/posts",
     tags=["Posts"],
 )

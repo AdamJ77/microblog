@@ -8,3 +8,4 @@ ecs-logging
 python-jose
 python-dotenv
 python-multipart
+elasticsearch
