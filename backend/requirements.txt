@@ -5,3 +5,4 @@ uvicorn
 setuptools-scm
 httpx
 ecs-logging
+elasticsearch

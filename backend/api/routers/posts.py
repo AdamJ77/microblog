@@ -1,10 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from starlette.requests import Request
+
+from backend.api.logger import LoggingRoute
 from backend.domain import use_cases
 
 AVATAR_BASE_URL = "http://microblog.com/users/avatars/"
 
 router = APIRouter(
+    route_class=LoggingRoute,
     prefix="/posts",
     tags=["Posts"],
 )
