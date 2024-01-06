@@ -147,7 +147,17 @@ async def signup(request: Request):
     })
 
     user_id = str(result.inserted_id)
-    return {"id": user_id}
+
+    token_data = {
+        "id": user_id
+    }
+    access_token = create_jwt_token(token_data)
+
+    response = JSONResponse(content={"id": user_id})
+    response.set_cookie(key="token", value=access_token, httponly=True,
+                        secure=False, samesite="lax")
+
+    return response
 
 
 @router.get("/user")

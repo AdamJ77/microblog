@@ -2,7 +2,9 @@ import React, { lazy, Suspense, CSSProperties } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loading from "./components/common/Loading";
 import "react-photo-view/dist/react-photo-view.css";
+import "react-toastify/dist/ReactToastify.css";
 import AuthContextProvider from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 const Home = lazy(() => import("./pages/Home"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -86,23 +88,38 @@ export default function App() {
   ];
 
   return (
-    <Router>
-      <Routes>
-        {protectedRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={authorize(route.component)}
-          />
-        ))}
-        {routes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<SuspenseWrapper lazyComponent={route.component} />}
-          />
-        ))}
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          {protectedRoutes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={authorize(route.component)}
+            />
+          ))}
+          {routes.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={<SuspenseWrapper lazyComponent={route.component} />}
+            />
+          ))}
+        </Routes>
+      </Router>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
