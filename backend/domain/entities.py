@@ -21,9 +21,10 @@ class Media:
 
 
 class User:
-    def __init__(self, id, name) -> None:
+    def __init__(self, id, name, avatar) -> None:
         self.__id = id
         self.__name = name
+        self.__avatar = avatar
 
     @property
     def id(self) -> str:
@@ -32,6 +33,10 @@ class User:
     @property
     def name(self) -> str:
         return self.__name
+
+    @property
+    def avatar(self) -> str:
+        return self.__avatar
 
 
 class Post:

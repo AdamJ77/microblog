@@ -33,7 +33,7 @@ async def get_posts(request: Request, start: int, count: int):
             "id": p.author.id,
             "attributes": {
                 "name": p.author.name,
-                "avatar": {"src": AVATAR_BASE_URL + p.author.name + ".png"},
+                "avatar": {"src": p.author.avatar["src"]},
             },
         }
         datetime = get_datetime_str(p.datetime)
@@ -74,7 +74,8 @@ async def add_post(request: Request, user_id: str = Depends(get_current_user)):
     db = request.app.database
     user = await db.users.find_one({"_id": ObjectId(user_id)})
     name = user.get("username", "")
-    author = User(user_id, name)
+    avatar = user.get("avatar", "")
+    author = User(user_id, name, avatar)
 
     media = [
         Media(Media.Type[m["type"].upper()], m["src"])

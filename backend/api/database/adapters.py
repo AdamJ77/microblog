@@ -14,7 +14,8 @@ async def cursor_to_posts(cursor: AsyncIOMotorCursor) -> list[Post]:
             Post(
                 id=str(p["_id"]),
                 text=attributes["text"],
-                author=User(author["id"], author["attributes"]["name"]),
+                author=User(author["id"], author["attributes"]["name"],
+                            author["attributes"]["avatar"]),
                 media=[
                     Media(Media.Type[m["type"].upper()], m["src"])
                     for m in media
@@ -33,7 +34,7 @@ def post_to_doc(post: Post):
         "attributes": {
             "name": post.author.name,
             "avatar": {
-                "src": f"http://microblog.com/avatars/{post.author.name}.png"
+                "src": post.author.avatar
             },
         },
     }
