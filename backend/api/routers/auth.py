@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import secrets
 import hashlib
+from bson import ObjectId
 
 load_dotenv()
 
@@ -147,3 +148,17 @@ async def signup(request: Request):
 
     user_id = str(result.inserted_id)
     return {"id": user_id}
+
+
+@router.get("/user")
+async def user(request: Request, user_id: str = Depends(get_current_user)):
+    db = request.app.database
+    user = await db.users.find_one({"_id": ObjectId(user_id)})
+    name = user.get("username", "")
+    avatar = user.get("avatar", "")
+
+    return {
+        "id": user_id,
+        "username": name,
+        "avatar": avatar
+    }

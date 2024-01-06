@@ -7,10 +7,15 @@ import {
 } from "../../../constants";
 import { uploadMultipleFiles } from "../../../utils/uploadFiles";
 import axios from "axios";
+import { usePostsContext } from "../../../context/PostsProvider";
+import { v4 as uuidv4 } from "uuid";
+import { useHomePageContext } from "../../../context/HomePageContext";
 
 export default function PostUploader() {
+  const { user } = useHomePageContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
+  const { addPost } = usePostsContext();
 
   const handleTextareaChange = () => {
     if (!textareaRef.current) return;
@@ -36,9 +41,8 @@ export default function PostUploader() {
   };
 
   const me = {
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/99/Elon_Musk_Colorado_2022_%28cropped2%29.jpg",
-    alt: "Elon Musk",
+    image: user!.avatar,
+    alt: user!.username,
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,6 +64,18 @@ export default function PostUploader() {
       return { type, src: url };
     });
 
+    addPost({
+      id: uuidv4(),
+      body: textareaRef.current!.value,
+      media: urls,
+      created: new Date(),
+      author: {
+        id: user!.id,
+        name: user!.username,
+        avatar: user!.avatar,
+      },
+    });
+
     const body = {
       data: {
         type: "posts",
@@ -77,6 +93,11 @@ export default function PostUploader() {
         withCredentials: true,
       }
     );
+
+    textareaRef.current!.value = "";
+    const input = document.querySelector("#file-input") as HTMLInputElement;
+    input.value = "";
+    setSelectedFiles([]);
   };
 
   return (

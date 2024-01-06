@@ -4,8 +4,13 @@ import MainSection from "../components/home/Main/MainSection";
 import RightBar from "../components/home/RightBar/RightBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import HomePageContextProvider, {
+  useHomePageContext,
+} from "../context/HomePageContext";
+import Loading from "../components/common/Loading";
 
-export default function Home() {
+function HomeInner() {
+  const { isLoading } = useHomePageContext();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -20,6 +25,8 @@ export default function Home() {
     navigate("/login");
   };
 
+  if (isLoading) return <Loading text="" />;
+
   return (
     <>
       <button onClick={handleLogout}>logout</button>
@@ -29,5 +36,13 @@ export default function Home() {
         <RightBar />
       </div>
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <HomePageContextProvider>
+      <HomeInner />
+    </HomePageContextProvider>
   );
 }

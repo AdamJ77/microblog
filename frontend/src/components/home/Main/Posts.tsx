@@ -1,10 +1,10 @@
 import React from "react";
 import Post from "./Post";
 import styles from "./styles/Posts.module.css";
-import useFetchPosts from "../../../hooks/useFetchPosts";
+import { usePostsContext } from "../../../context/PostsProvider";
 
 export default function Posts() {
-  const { posts, isLoading, ref, hasMore } = useFetchPosts();
+  const { posts, isLoading, ref, hasMore } = usePostsContext();
 
   if (isLoading) return <div>loading...</div>;
 

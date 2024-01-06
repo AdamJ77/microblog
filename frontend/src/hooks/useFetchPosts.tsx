@@ -65,5 +65,9 @@ export default function useFetchPosts() {
     fetchPosts();
   }, [link, inView]);
 
-  return { posts, isLoading, error, ref, hasMore };
+  const addPost = (newPost: IPost) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
+
+  return { posts, isLoading, error, ref, hasMore, addPost };
 }

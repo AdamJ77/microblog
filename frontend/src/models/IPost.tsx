@@ -1,5 +1,5 @@
 export default interface IPost {
-  id: number;
+  id: string;
   body: string;
   media: string[];
   created: Date;
