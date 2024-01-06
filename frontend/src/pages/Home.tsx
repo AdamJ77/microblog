@@ -29,7 +29,7 @@ function HomeInner() {
 
   return (
     <>
-      <button onClick={handleLogout}>logout</button>
+      {/* <button onClick={handleLogout}>logout</button> */}
       <div style={{ display: "flex" }}>
         <LeftBar />
         <MainSection />

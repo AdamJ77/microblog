@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
-import axios from "axios";
+import React, { createContext, useContext } from "react";
 import useFetch from "../hooks/useFetch";
 
 interface HomePageContextProps {
@@ -25,10 +24,6 @@ export const HomePageContextProvider = ({ children }: HomePageContextProps) => {
       withCredentials: true,
     }
   );
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <HomePageContext.Provider
