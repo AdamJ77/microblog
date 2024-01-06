@@ -7,10 +7,8 @@ import {
 } from "../../../constants";
 import { uploadMultipleFiles } from "../../../utils/uploadFiles";
 import axios from "axios";
-import { useAppContext } from "../../../context/AppContext";
 
 export default function PostUploader() {
-  const { tokenRef } = useAppContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
 
@@ -76,9 +74,7 @@ export default function PostUploader() {
       `${process.env.REACT_APP_SERVER_URL}/posts`,
       body,
       {
-        headers: {
-          Authorization: `Bearer ${tokenRef.current}`,
-        },
+        withCredentials: true,
       }
     );
   };

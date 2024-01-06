@@ -2,10 +2,8 @@ import React from "react";
 import styles from "./styles/LoginForm.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAppContext } from "../../context/AppContext";
 
 export default function LoginForm() {
-  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const redirect = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -24,12 +22,9 @@ export default function LoginForm() {
     };
 
     try {
-      const data = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/auth/login`,
-        body
-      );
-
-      tokenRef.current = data.data.token;
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, body, {
+        withCredentials: true,
+      });
     } catch (e) {
       return;
     }

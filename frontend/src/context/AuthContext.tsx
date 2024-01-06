@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "./AppContext";
+import axios from "axios";
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -13,25 +13,20 @@ const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: AuthContextProps) => {
-  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const refreshTokenIntervalRef = useRef<any | null>(null);
 
   useEffect(() => {
-    if (!tokenRef.current) return;
-
     const refreshToken = async () => {
       try {
         console.log("Trying to refresh the token...");
 
-        const response = await fetch(
+        const response = await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/auth/refresh`,
+          {},
           {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${tokenRef.current}`,
-            },
+            withCredentials: true,
           }
         );
 
@@ -40,8 +35,6 @@ export const AuthContextProvider = ({ children }: AuthContextProps) => {
           return;
         }
 
-        const data = await response.json();
-        tokenRef.current = data.token;
         console.log("Token refreshed successfully.");
       } catch (error) {
         navigate("/login");

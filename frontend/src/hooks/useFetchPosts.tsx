@@ -31,11 +31,32 @@ export default function useFetchPosts() {
       axios
         .get(link)
         .then((response) => {
-          console.log(response.data.data);
           if (response.status !== 200) throw new Error();
           if (response.data.data.length === 0) setHasMore(false);
           setLink(prepareLink(response.data.links.next));
-          setPosts((prev) => [...prev, ...preparePosts(response.data)]);
+          setPosts((prev) => {
+            const fetchedPosts = preparePosts(response.data);
+
+            const uniquePosts: IPost[] = [];
+            fetchedPosts.forEach((fetchedPost) => {
+              if (
+                uniquePosts.some(
+                  (uniquePost) => uniquePost.body === fetchedPost.body
+                )
+              )
+                return;
+              uniquePosts.push(fetchedPost);
+            });
+
+            const newPosts = uniquePosts.filter(
+              (fetchedPost) =>
+                !prev.some((prevPost) => prevPost.body === fetchedPost.body)
+            );
+
+            if (newPosts.length !== fetchedPosts.length) setHasMore(false);
+
+            return [...prev, ...newPosts];
+          });
         })
         .catch((err) => setError(err))
         .finally(() => setIsLoading(false));

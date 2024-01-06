@@ -19,10 +19,10 @@ ADD_POST_REQUEST = {
 }
 
 
-def create_auth_header(id: str):
+def create_auth_cookie(id: str):
     token = create_jwt_token({"id": id})
     return {
-        "Authorization": f"Bearer {token}"
+        "token": token
     }
 
 
@@ -106,9 +106,9 @@ def test_get_posts_not_enough_posts(client):
 
 @pytest.mark.asyncio
 async def test_get_and_add_post(client, get_user):
-    auth_header = create_auth_header(get_user)
+    auth_cookie = create_auth_cookie(get_user)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
-                           headers=auth_header)
+                           cookies=auth_cookie)
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -121,9 +121,9 @@ async def test_get_and_add_post(client, get_user):
 @pytest.mark.asyncio
 async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
                                                    get_user):
-    auth_header = create_auth_header(get_user)
+    auth_cookie = create_auth_cookie(get_user)
     response = client.post("/posts/", json=ADD_POST_REQUEST,
-                           headers=auth_header)
+                           cookies=auth_cookie)
     assert response.status_code == 200
 
     monkeypatch.setattr(client.app, "post_storage", None)
@@ -136,8 +136,8 @@ async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
 @pytest.mark.asyncio
 async def test_add_post_invalid_type(client, get_user):
     body = {"data": {"type": "bananas"}}
-    auth_header = create_auth_header(get_user)
-    response = client.post("/posts/", json=body, headers=auth_header)
+    auth_cookie = create_auth_cookie(get_user)
+    response = client.post("/posts/", json=body, cookies=auth_cookie)
     assert response.status_code == 400
 
 

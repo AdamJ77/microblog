@@ -3,6 +3,7 @@ from backend.domain import entities
 from pathlib import Path
 import pytest
 import hashlib
+import asyncio
 
 
 @pytest.fixture(scope="session")
@@ -44,8 +45,7 @@ def post(post_author, media):
     )
 
 
-@pytest.fixture
-async def get_user(client):
+async def async_get_user(client):
     db = client.app.database
 
     # Wstawianie nowego użytkownika do bazy danych
@@ -60,3 +60,8 @@ async def get_user(client):
     user_id = str(inserted_result.inserted_id)
 
     return user_id
+
+
+@pytest.fixture
+def get_user(client):
+    return asyncio.run(async_get_user(client))

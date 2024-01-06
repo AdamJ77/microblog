@@ -14,7 +14,7 @@ from backend.api.routers.static_files import STATIC_FOLDER_NAME
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    db_client = Database()
+    db_client = Database("mongodb://localhost:27017/mydatabase")
     app.database = await db_client.database
     app.post_storage = adapters.PostStorageDatabase(app.database)
     app.timeline = adapters.TimelineStorageDatabase(app.database)

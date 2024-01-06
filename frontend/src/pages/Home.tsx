@@ -4,12 +4,8 @@ import MainSection from "../components/home/Main/MainSection";
 import RightBar from "../components/home/RightBar/RightBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAppContext } from "../context/AppContext";
-import useCheckToken from "../hooks/useCheckToken";
 
 export default function Home() {
-  useCheckToken();
-  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -17,21 +13,21 @@ export default function Home() {
       `${process.env.REACT_APP_SERVER_URL}/auth/logout`,
       {},
       {
-        headers: {
-          Authorization: `Bearer ${tokenRef.current}`,
-        },
+        withCredentials: true,
       }
     );
 
-    tokenRef.current = null;
     navigate("/login");
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <LeftBar />
-      <MainSection />
-      <RightBar />
-    </div>
+    <>
+      <button onClick={handleLogout}>logout</button>
+      <div style={{ display: "flex" }}>
+        <LeftBar />
+        <MainSection />
+        <RightBar />
+      </div>
+    </>
   );
 }
