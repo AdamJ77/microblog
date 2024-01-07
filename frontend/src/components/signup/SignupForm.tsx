@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AVAILABLE_IMAGE_EXTENSIONS, DEFAULT_AVATAR } from "../../constants";
 import styles from "./style/SignupForm.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { uploadSingleFile } from "../../utils/uploadFiles";
 
 export default function SignupForm() {
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
@@ -54,10 +56,33 @@ export default function SignupForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isValidPassword = form.password === form.confirmPassword;
-    console.log(form, isValidPassword);
+
+    if (!isValidPassword) alert("Passwords don't match.");
+
+    const formData = new FormData(e.currentTarget);
+
+    const file = formData.get("avatar") as File;
+    const url = await uploadSingleFile(file)!;
+
+    const body = {
+      login: formData.get("login"),
+      password: formData.get("password"),
+      username: formData.get("username"),
+      avatar: url,
+    };
+
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/signup`,
+        body
+      );
+      if (data.status !== 200) throw new Error();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -94,6 +119,14 @@ export default function SignupForm() {
           />
         </div>
         <div style={{ width: "60%" }}>
+          <input
+            type="text"
+            name="username"
+            placeholder="username"
+            className={styles.input}
+            required
+            onChange={handleFormChange}
+          />
           <input
             type="text"
             name="login"

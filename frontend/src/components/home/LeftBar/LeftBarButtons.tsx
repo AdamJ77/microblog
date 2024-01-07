@@ -2,8 +2,11 @@ import React from "react";
 import styles from "./styles/LeftBarButtons.module.css";
 import TweetButton from "./TweetButton";
 import Avatar from "../../common/Avatar";
+import { useNavigate } from "react-router-dom";
 
 export default function LeftBarButtons() {
+  const navigate = useNavigate();
+
   const getTextColor = (path: string) => {
     return window.location.pathname === path
       ? styles.selected
@@ -22,7 +25,7 @@ export default function LeftBarButtons() {
       image:
         "https://upload.wikimedia.org/wikipedia/commons/9/99/Elon_Musk_Colorado_2022_%28cropped2%29.jpg",
       colorClass: getTextColor("/profile"),
-      onclick: () => {},
+      onclick: () => navigate("/profile"),
     },
   ];
 

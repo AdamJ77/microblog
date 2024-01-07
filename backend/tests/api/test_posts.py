@@ -1,6 +1,7 @@
 from backend.api.routers import posts
 from datetime import datetime
 import pytest
+from backend.api.routers.auth import create_jwt_token
 
 ADD_POST_REQUEST = {
     "data": {
@@ -16,6 +17,13 @@ ADD_POST_REQUEST = {
         },
     }
 }
+
+
+def create_auth_header(id: str):
+    token = create_jwt_token({"id": id})
+    return {
+        "Authorization": f"Bearer {token}"
+    }
 
 
 @pytest.fixture
@@ -96,8 +104,11 @@ def test_get_posts_not_enough_posts(client):
     assert len(data) == 0
 
 
-def test_get_and_add_post(client):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+@pytest.mark.asyncio
+async def test_get_and_add_post(client, get_user):
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -107,11 +118,14 @@ def test_get_and_add_post(client):
     check_get_posts_response(response_content, check_date=False)
 
 
-def test_add_and_get_post_from_timeline_only(client, monkeypatch):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+@pytest.mark.asyncio
+async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
+                                                   get_user):
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           headers=auth_header)
     assert response.status_code == 200
 
-    # Ensure that posts cannot be retrieved from post storage (timeline only)
     monkeypatch.setattr(client.app, "post_storage", None)
 
     response = client.get("/posts/?start=0&count=1")
@@ -119,9 +133,11 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch):
     check_get_posts_response(response.json(), check_date=False)
 
 
-def test_add_post_invalid_type(client):
+@pytest.mark.asyncio
+async def test_add_post_invalid_type(client, get_user):
     body = {"data": {"type": "bananas"}}
-    response = client.post("/posts/", json=body)
+    auth_header = create_auth_header(get_user)
+    response = client.post("/posts/", json=body, headers=auth_header)
     assert response.status_code == 400
 
 

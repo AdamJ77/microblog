@@ -1,8 +1,11 @@
 import React from "react";
 import styles from "./styles/LoginForm.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAppContext } from "../../context/AppContext";
 
 export default function LoginForm() {
+  const { tokenRef } = useAppContext();
   const navigate = useNavigate();
 
   const redirect = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -10,15 +13,27 @@ export default function LoginForm() {
     navigate("/signup");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
 
-    // simulation of logging in
+    const body = {
+      login: formData.get("login"),
+      password: formData.get("password"),
+    };
+
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/login`,
+        body
+      );
+
+      tokenRef.current = data.data.token;
+    } catch (e) {
+      return;
+    }
+
     navigate("/");
   };
 

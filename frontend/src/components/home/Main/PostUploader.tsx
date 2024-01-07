@@ -5,8 +5,12 @@ import {
   AVAILABLE_IMAGE_EXTENSIONS,
   AVAILABLE_VIDEO_EXTENSIONS,
 } from "../../../constants";
+import { uploadMultipleFiles } from "../../../utils/uploadFiles";
+import axios from "axios";
+import { useAppContext } from "../../../context/AppContext";
 
 export default function PostUploader() {
+  const { tokenRef } = useAppContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
 
@@ -39,8 +43,48 @@ export default function PostUploader() {
     alt: "Elon Musk",
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const urls = await uploadMultipleFiles(selectedFiles);
+
+    const text = textareaRef.current!.value;
+
+    const preparedMedia = urls.map((url) => {
+      const splitted = url.split(".");
+      const ext = splitted[splitted.length - 1];
+
+      let type = null;
+      if (AVAILABLE_IMAGE_EXTENSIONS.includes(ext)) type = "image";
+      else if (AVAILABLE_VIDEO_EXTENSIONS.includes(ext)) type = "video";
+      else return;
+
+      return { type, src: url };
+    });
+
+    const body = {
+      data: {
+        type: "posts",
+        attributes: {
+          body: text,
+          media: preparedMedia,
+        },
+      },
+    };
+
+    const data = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/posts`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+        },
+      }
+    );
+  };
+
   return (
-    <form className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={handleSubmit}>
       <div className={styles.avatar}>
         <Avatar image={me.image} alt={me.alt} />
       </div>
@@ -54,6 +98,7 @@ export default function PostUploader() {
         <div>
           {selectedFiles.map((file, index) => (
             <button
+              key={index}
               title="remove"
               className={styles["uploaded-file-btn"]}
               onClick={(e) => {
@@ -97,13 +142,7 @@ export default function PostUploader() {
           />
         </label>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-        className={styles.button}
-        type="submit"
-      >
+      <button className={styles.button} type="submit">
         tweet
       </button>
     </form>
