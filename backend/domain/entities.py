@@ -48,6 +48,12 @@ class Post:
     def id(self) -> str:
         return self.__id
 
+    @id.setter
+    def id(self, value):
+        if self.__id is not None:
+            ValueError("Cannot change id of post if its already set")
+        self.__id = value
+
     @property
     def text(self) -> str:
         return self.__text
