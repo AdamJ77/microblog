@@ -12,16 +12,12 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
-# MODULES
-module "global_setup" {
-  source = "../../../global"
-}
 
 # Create AKS
 resource "azurerm_kubernetes_cluster" "microblog-aks" {
-  name                = "${var.cluster_name}-${module.global_setup.resource_group_name}"
-  location            = module.global_setup.resource_group_location
-  resource_group_name = module.global_setup.resource_group_name
+  name                = "${var.cluster_name}-${var.resource_group_name}"
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
   dns_prefix          = var.dns_prefix # used to create FQDN for cluster (<dns_prefix>.<region>.azmk8s.io)
 
   linux_profile {
@@ -48,6 +44,7 @@ resource "azurerm_kubernetes_cluster" "microblog-aks" {
 
   tags = {
     Environment = "test"
+    ComponentType = var.component_type[1]
   }
 }
 
