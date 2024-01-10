@@ -144,7 +144,7 @@ jobs:
   deploy-to-aks:
     runs-on: ubuntu-latest
     environment: production
-    needs: deploy-docker-image
+    needs: deploy-backend-docker-image
     if: github.ref == 'refs/heads/master'
 
     steps:
