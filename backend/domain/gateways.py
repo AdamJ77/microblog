@@ -3,7 +3,7 @@ from backend.domain.entities import Post, Timeline
 
 
 class PostStorageInterface(ABC):
-    async def add_post(self, post: Post) -> Post:
+    async def add_post(self, post: Post) -> str:
         pass
 
     # Should not return the same posts on each call

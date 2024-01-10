@@ -33,6 +33,7 @@ def insert_example_posts(request, db, post):
 
     marker: Mark = request.node.get_closest_marker("count")
     post_doc = post_to_doc(post)
+    del post_doc["_id"]
 
     for collection in marker.kwargs:
         count = marker.kwargs[collection]
@@ -131,6 +132,18 @@ async def test_add_and_get_post_from_timeline_only(client, monkeypatch,
     response = client.get("/posts/?start=0&count=1")
     assert response.status_code == 200
     check_get_posts_response(response.json(), check_date=False)
+
+
+def test_add_and_get_post_from_timeline_and_post_storage(client):
+    response = client.post("/posts/", json=ADD_POST_REQUEST)
+    assert response.status_code == 200
+
+    response = client.get("/posts/?start=0&count=2")
+    assert response.status_code == 200
+    data = response.json()["data"]
+
+    assert len(data) == 2
+    assert data[0]["id"] == data[1]["id"]
 
 
 @pytest.mark.asyncio

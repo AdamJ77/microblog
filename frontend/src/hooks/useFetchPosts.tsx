@@ -41,7 +41,7 @@ export default function useFetchPosts() {
             fetchedPosts.forEach((fetchedPost) => {
               if (
                 uniquePosts.some(
-                  (uniquePost) => uniquePost.body === fetchedPost.body
+                  (uniquePost) => uniquePost.id === fetchedPost.id
                 )
               )
                 return;
@@ -50,7 +50,7 @@ export default function useFetchPosts() {
 
             const newPosts = uniquePosts.filter(
               (fetchedPost) =>
-                !prev.some((prevPost) => prevPost.body === fetchedPost.body)
+                !prev.some((prevPost) => prevPost.id === fetchedPost.id)
             );
 
             if (newPosts.length !== fetchedPosts.length) setHasMore(false);
