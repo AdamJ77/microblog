@@ -51,3 +51,27 @@ variable "ssh_public_key_path" {
   description = "Path to the SSH public key"
   sensitive = true
 }
+
+
+
+## NEW
+
+variable "resource_group_name" {
+  description = "Name of the resource group"
+  type        = string
+}
+
+variable "virtual_network_name" {
+  description = "Name of the virtual network"
+  type        = string
+}
+
+variable "resource_group_location" {
+  description = "Location of the resource group"
+  type        = string
+}
+
+variable "component_type" {
+  description = "Type of component"
+  type        = list(string)
+}
