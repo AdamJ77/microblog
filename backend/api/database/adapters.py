@@ -53,6 +53,8 @@ def post_to_doc(post: Post):
             ],
         },
     }
+    if post.id is not None:
+        post_doc["_id"] = post.id
     return post_doc
 
 
@@ -60,8 +62,9 @@ class PostStorageDatabase(gateways.PostStorageInterface):
     def __init__(self, db: AsyncIOMotorDatabase) -> None:
         self.db = db
 
-    async def add_post(self, post: Post) -> Post:
-        await self.db["posts"].insert_one(post_to_doc(post))
+    async def add_post(self, post: Post) -> str:
+        id = (await self.db["posts"].insert_one(post_to_doc(post))).inserted_id
+        return id
 
     async def get_any_posts(self, count) -> list[Post]:
         cursor: AsyncIOMotorCursor = self.db["posts"].find(limit=count)

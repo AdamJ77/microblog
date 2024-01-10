@@ -10,7 +10,8 @@ async def add_post(
     timeline_storage: TimelineStorageInterface,
     post: Post,
 ):
-    await post_storage.add_post(post)
+    id = await post_storage.add_post(post)
+    post.id = str(id)
     timeline = await timeline_storage.read()
     timeline.try_add_post(post)
     await timeline_storage.write(timeline)
