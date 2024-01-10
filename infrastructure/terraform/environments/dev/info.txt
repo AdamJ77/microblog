@@ -5,3 +5,9 @@ terraform init -backend-config=backend.conf
 
 To update the state file to match current real-world resources:
 terraform refresh
+
+To apply new changes:
+terraform apply -var-file="secrets.tfvars"
+
+To destroy certain resource:
+terraform destroy -target=<RESOURCE_TYPE.RESOURCE_NAME> -var-file="secrets.tfvars"
