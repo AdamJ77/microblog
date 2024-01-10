@@ -9,8 +9,7 @@ from fastapi import Response, Request
 from fastapi.routing import APIRoute
 from starlette.background import BackgroundTask
 
-ecs = Elasticsearch(hosts=['http://localhost:9200'])
-print(ecs.info())
+ecs = Elasticsearch(hosts=['http://elasticsearch:9200'])
 
 formatter = None
 
@@ -19,7 +18,10 @@ class CustomLogger(logging.Logger):
     def handle(self, record):
         global formatter
         if formatter is not None:
-            ecs.index(index='microblog-backend-logs', body=json.dumps(formatter.format_to_ecs(record), default=lambda o: str(o)))
+            try:
+                ecs.index(index='microblog-backend-logs', body=json.dumps(formatter.format_to_ecs(record), default=lambda o: str(o)))
+            except Exception as e:
+                print(e)
         super().handle(record)
 
 
