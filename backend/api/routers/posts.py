@@ -29,6 +29,7 @@ async def get_posts(request: Request, start: int, count: int):
     )
     data = []
     for p in posts:
+        print(p.author.avatar)
         author = {
             "id": p.author.id,
             "attributes": {
