@@ -140,7 +140,6 @@ jobs:
           context: ./frontend/
           push: true
           tags: ${{ secrets.DOCKERHUB_LOGIN }}/microblog-frontend:${{ github.run_number }}
-
   deploy-to-aks:
     runs-on: ubuntu-latest
     environment: production
