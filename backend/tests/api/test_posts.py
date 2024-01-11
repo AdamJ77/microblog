@@ -29,7 +29,7 @@ def signup_user(client):
         "password": hashlib.sha256("fake_password".encode()).hexdigest(),
         "avatar": "http://microblog.com/avatars/Greg.png"
     }
-    response = client.post("/auth/signup", json=body).json()
+    response = client.post("/api/auth/signup", json=body).json()
     return response
 
 
@@ -76,7 +76,7 @@ def check_get_posts_response(response, check_date=True):
 @pytest.mark.count(post_storage=1, timeline=1)
 @pytest.mark.usefixtures("insert_example_posts")
 def test_get_posts_no_posts(client):
-    response = client.get("/posts/?start=0&count=0")
+    response = client.get("/api/posts/?start=0&count=0")
     assert response.status_code == 200
     response_content = response.json()
     assert response_content["links"] == {
@@ -89,7 +89,7 @@ def test_get_posts_no_posts(client):
 @pytest.mark.count(post_storage=1, timeline=1)
 @pytest.mark.usefixtures("insert_example_posts")
 def test_get_posts_from_timeline_and_storage(client):
-    response = client.get("/posts/?start=0&count=2")
+    response = client.get("/api/posts/?start=0&count=2")
     assert response.status_code == 200
     response_content = response.json()
     check_get_posts_response(response_content)
@@ -98,14 +98,14 @@ def test_get_posts_from_timeline_and_storage(client):
 @pytest.mark.count(timeline=2)
 @pytest.mark.usefixtures("insert_example_posts")
 def test_get_posts_from_timeline_only(client):
-    response = client.get("/posts/?start=0&count=2")
+    response = client.get("/api/posts/?start=0&count=2")
     response_content = response.json()
     data = response_content["data"]
     assert len(data) == 2
 
 
 def test_get_posts_not_enough_posts(client):
-    response = client.get("/posts/?start=0&count=999")
+    response = client.get("/api/posts/?start=0&count=999")
     response_content = response.json()
     data = response_content["data"]
     assert len(data) == 0
@@ -114,12 +114,12 @@ def test_get_posts_not_enough_posts(client):
 @pytest.mark.asyncio
 async def test_get_and_add_post(client):
     token = signup_user(client)["token"]
-    response = client.post("/posts/", json=ADD_POST_REQUEST,
+    response = client.post("/api/posts/", json=ADD_POST_REQUEST,
                            cookies={"token": token})
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
-    response = client.get("/posts/?start=0&count=2")
+    response = client.get("/api/posts/?start=0&count=2")
     assert response.status_code == 200
     response_content = response.json()
     check_get_posts_response(response_content, check_date=False)
@@ -128,24 +128,24 @@ async def test_get_and_add_post(client):
 @pytest.mark.asyncio
 async def test_add_and_get_post_from_timeline_only(client, monkeypatch):
     token = signup_user(client)["token"]
-    response = client.post("/posts/", json=ADD_POST_REQUEST,
+    response = client.post("/api/posts/", json=ADD_POST_REQUEST,
                            cookies={"token": token})
     assert response.status_code == 200
 
     monkeypatch.setattr(client.app, "post_storage", None)
 
-    response = client.get("/posts/?start=0&count=1")
+    response = client.get("/api/posts/?start=0&count=1")
     assert response.status_code == 200
     check_get_posts_response(response.json(), check_date=False)
 
 
 def test_add_and_get_post_from_timeline_and_post_storage(client):
     token = signup_user(client)["token"]
-    response = client.post("/posts/", json=ADD_POST_REQUEST,
+    response = client.post("/api/posts/", json=ADD_POST_REQUEST,
                            cookies={"token": token})
     assert response.status_code == 200
 
-    response = client.get("/posts/?start=0&count=2")
+    response = client.get("/api/posts/?start=0&count=2")
     assert response.status_code == 200
     data = response.json()["data"]
 
@@ -157,7 +157,7 @@ def test_add_and_get_post_from_timeline_and_post_storage(client):
 async def test_add_post_invalid_type(client):
     token = signup_user(client)["token"]
     body = {"data": {"type": "bananas"}}
-    response = client.post("/posts/", json=body,
+    response = client.post("/api/posts/", json=body,
                            cookies={"token": token})
     assert response.status_code == 400
 

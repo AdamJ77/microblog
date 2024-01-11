@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -23,6 +23,18 @@ async def lifespan(app: FastAPI):
 
 
 def create_app():
+    router = APIRouter(
+        prefix='/api',
+        tags=['Auth']
+    )
+    # including routers
+    router.include_router(hello.router)
+    router.include_router(posts.router)
+    router.include_router(auth.router)
+    router.include_router(static_files.router)
+    router.mount(
+        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
+
     init_logger()
     app = FastAPI(lifespan=lifespan)
 
@@ -35,14 +47,8 @@ def create_app():
     )
 
     os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
-    app.mount(
-        "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
 
-    # including routers
-    app.include_router(hello.router)
-    app.include_router(posts.router)
-    app.include_router(auth.router)
-    app.include_router(static_files.router)
+    app.include_router(router)
 
     return app
 
