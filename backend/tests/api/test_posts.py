@@ -37,7 +37,7 @@ def signup_user(client):
         "password": hashlib.sha256("fake_password".encode()).hexdigest(),
         "avatar": "http://microblog.com/avatar.jpg"
     }
-    response = client.post("/auth/signup", body=body).json()
+    response = client.post("/auth/signup", json=body).json()
     return response
 
 
