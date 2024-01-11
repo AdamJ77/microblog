@@ -167,6 +167,7 @@ jobs:
           CONNECTION_URL: ${{ secrets.DB_CONNECTION_URL }}
           IMAGE_TAG: ${{ github.run_number }}
           DOCKERHUB_LOGIN: ${{ secrets.DOCKERHUB_LOGIN }}
+          NGINXIP: ${{ secrets.NGINX_IP }}
 
       - name: Deploy to AKS
         run: |

@@ -28,7 +28,7 @@ spec:
           - containerPort: 2137
           env:
           - name: REACT_APP_SERVER_URL
-            value: "http://nginx-service" # NGINX LOAD BALANCER EXTERNAL IP http://<IP>/api
+            value: "http://__NGINXIP__/api" # NGINX LOAD BALANCER EXTERNAL IP http://<IP>/api
           resources:
               requests:
                 cpu: 100m
