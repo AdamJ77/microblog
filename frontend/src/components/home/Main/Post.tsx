@@ -17,12 +17,17 @@ export default function Post({ post }: IPostProps) {
     calculateTimeDifference(new Date(), post.created)
   );
 
+  let avatar = post.author.avatar;
+  while (typeof avatar !== "string") {
+    avatar = (avatar as any).src;
+  }
+
   return (
     <div className={styles.post}>
       <div className={styles.avatar}>
-        <Avatar image={post.author.avatar} alt={post.author.name} />
+        <Avatar image={avatar} alt={post.author.name} />
       </div>
-      <div>
+      <div style={{ width: "100%" }}>
         <div className={styles.header}>
           <h3>{post.author.name}</h3>
           <span className={styles.date}>{dateText}</span>
