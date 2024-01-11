@@ -31,11 +31,11 @@ def create_auth_cookie(id: str):
 
 def signup_user(client):
     body = {
-        "username": "Bob",
+        "username": "Greg",
         "login": ''.join(random.choice(
             string.ascii_letters + string.digits) for _ in range(10)),
         "password": hashlib.sha256("fake_password".encode()).hexdigest(),
-        "avatar": "http://microblog.com/avatar.jpg"
+        "avatar": "http://microblog.com/avatars/Greg.jpg"
     }
     response = client.post("/auth/signup", json=body).json()
     return response
