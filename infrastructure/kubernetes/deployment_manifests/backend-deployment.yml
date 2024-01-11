@@ -20,10 +20,10 @@ spec:
     spec:
       containers:
       - name: backend-container
-        image: kozlowskimaciej/microblog-backend:{{IMAGE_TAG}}
+        image: __DOCKERHUB_LOGIN__/microblog-backend:__IMAGE_TAG__
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
         - name: DB_CONNECTION_URL
-          value: "{CONNECTION_URL}"
+          value: __CONNECTION_URL__

@@ -5,8 +5,8 @@ all:
         primary:
           hosts:
             mongodb_1: 
-                ansible_host: 172.203.34.48
+                ansible_host: 20.98.233.74
         secondary:
           hosts:
             mongodb_2:
-                ansible_host: 172.203.34.45
+                ansible_host: 20.98.235.232

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: kozlowskimaciej/microblog-frontend:{{IMAGE_TAG}}
+          image: __DOCKERHUB_LOGIN__/microblog-frontend:__IMAGE_TAG__
           imagePullPolicy: Always
           ports:
           - containerPort: 2137

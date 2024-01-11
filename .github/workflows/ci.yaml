@@ -121,19 +121,19 @@ jobs:
     environment: production
     needs: run-jest-tests
     if: github.ref == 'refs/heads/master'
-  
+
     steps:
       - uses: actions/checkout@v4
-  
+
       - name: set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-  
+
       - name: login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-  
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -152,15 +152,23 @@ jobs:
 
       - name: Set up kubectl
         run: |
-            mkdir ${HOME}/.kube
-            echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+          mkdir ${HOME}/.kube
+          echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
 
       - name: Use AKS context
-        run: kubectl config use-context deploy-context
+        run: kubectl config use-context aks-Microblog1
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["infrastructure/kubernetes/deployment_manifests/*-deployment.yml"]'
+          tokenPrefix: __
+          tokenSuffix: __
+        env:
+          CONNECTION_URL: ${{ secrets.DB_CONNECTION_URL }}
+          IMAGE_TAG: ${{ github.run_number }}
+          DOCKERHUB_LOGIN: ${{ secrets.DOCKERHUB_LOGIN }}
 
       - name: Deploy to AKS
         run: |
-          sed -i "s|{{IMAGE_TAG}}|${{ github.run_number }}|g" infrastructure/kubernetes/deployment_manifests/*-deployment.yml
-          sed -i "s|{{CONNECTION_URL}}|${{ secrets.DB_CONNECTION_URL }}|g" infrastructure/kubernetes/deployment_manifests/backend-deployment.yml
           chmod +x infrastructure/kubernetes/deployment_manifests/github_deployment.sh
           ./infrastructure/kubernetes/deployment_manifests/github_deployment.sh
