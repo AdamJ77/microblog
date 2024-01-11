@@ -29,7 +29,7 @@ def media():
 @pytest.fixture
 def post_author():
     return entities.User(id="213", name="Greg",
-                         avatar="http://microblog/static/usgadyuas.jpg")
+                         avatar="http://microblog.com/avatars/Greg.png")
 
 
 @pytest.fixture
