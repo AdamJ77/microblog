@@ -25,7 +25,8 @@ def posts(post_author):
 
 @pytest.fixture
 def user():
-    return entities.User(id=0, name="Maciej")
+    return entities.User(id=0, name="Maciej",
+                         avatar="http://microblog.com/static/ushdusdy.jpg")
 
 
 @pytest.fixture()
