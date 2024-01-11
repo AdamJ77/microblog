@@ -1,6 +1,9 @@
 from backend.api.routers import posts
 from datetime import datetime
 import pytest
+import random
+import string
+import hashlib
 
 ADD_POST_REQUEST = {
     "data": {
@@ -16,6 +19,18 @@ ADD_POST_REQUEST = {
         },
     }
 }
+
+
+def signup_user(client):
+    body = {
+        "username": "Greg",
+        "login": ''.join(random.choice(
+            string.ascii_letters + string.digits) for _ in range(10)),
+        "password": hashlib.sha256("fake_password".encode()).hexdigest(),
+        "avatar": "http://microblog.com/avatars/Greg.png"
+    }
+    response = client.post("/auth/signup", json=body).json()
+    return response
 
 
 @pytest.fixture
@@ -40,9 +55,8 @@ def check_get_posts_response(response, check_date=True):
     for post in response["data"]:
         assert post["type"] == "posts"
 
-        avatar_src = "http://microblog.com/users/avatars/Greg.png"
+        avatar_src = "http://microblog.com/avatars/Greg.png"
         author = post["attributes"]["author"]
-        assert author["id"] == "213"
         assert author["attributes"]["name"] == "Greg"
         assert author["attributes"]["avatar"]["src"] == avatar_src
 
@@ -97,8 +111,11 @@ def test_get_posts_not_enough_posts(client):
     assert len(data) == 0
 
 
-def test_get_and_add_post(client):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+@pytest.mark.asyncio
+async def test_get_and_add_post(client):
+    token = signup_user(client)["token"]
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           cookies={"token": token})
     assert response.status_code == 200
     assert response.json() == {"id": "0"}
 
@@ -108,11 +125,13 @@ def test_get_and_add_post(client):
     check_get_posts_response(response_content, check_date=False)
 
 
-def test_add_and_get_post_from_timeline_only(client, monkeypatch):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+@pytest.mark.asyncio
+async def test_add_and_get_post_from_timeline_only(client, monkeypatch):
+    token = signup_user(client)["token"]
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           cookies={"token": token})
     assert response.status_code == 200
 
-    # Ensure that posts cannot be retrieved from post storage (timeline only)
     monkeypatch.setattr(client.app, "post_storage", None)
 
     response = client.get("/posts/?start=0&count=1")
@@ -121,7 +140,9 @@ def test_add_and_get_post_from_timeline_only(client, monkeypatch):
 
 
 def test_add_and_get_post_from_timeline_and_post_storage(client):
-    response = client.post("/posts/", json=ADD_POST_REQUEST)
+    token = signup_user(client)["token"]
+    response = client.post("/posts/", json=ADD_POST_REQUEST,
+                           cookies={"token": token})
     assert response.status_code == 200
 
     response = client.get("/posts/?start=0&count=2")
@@ -132,9 +153,12 @@ def test_add_and_get_post_from_timeline_and_post_storage(client):
     assert data[0]["id"] == data[1]["id"]
 
 
-def test_add_post_invalid_type(client):
+@pytest.mark.asyncio
+async def test_add_post_invalid_type(client):
+    token = signup_user(client)["token"]
     body = {"data": {"type": "bananas"}}
-    response = client.post("/posts/", json=body)
+    response = client.post("/posts/", json=body,
+                           cookies={"token": token})
     assert response.status_code == 400
 
 

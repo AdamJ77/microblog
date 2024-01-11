@@ -1,6 +1,10 @@
 import React from "react";
 import styles from "./styles/LoginForm.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { validateLoginForm } from "./utils/validateLoginForm";
+import { toast } from "react-toastify";
+import { errorConfig } from "../../config/toasts";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -10,16 +14,33 @@ export default function LoginForm() {
     navigate("/signup");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    formData.forEach((val, key) => {
-      console.log(key, val);
-    });
+    const hasErrors = validateLoginForm(formData);
+    if (hasErrors) return;
 
-    // simulation of logging in
-    navigate("/");
+    const body = {
+      login: formData.get("login"),
+      password: formData.get("password"),
+    };
+
+    const toastID = toast.loading("Please wait...");
+
+    try {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/login`, body, {
+        withCredentials: true,
+      });
+
+      toast.dismiss(toastID);
+      navigate("/");
+    } catch (e) {
+      toast.update(
+        toastID,
+        errorConfig("An error occured when logging in. Check your credentials.")
+      );
+    }
   };
 
   return (
@@ -27,14 +48,12 @@ export default function LoginForm() {
       <h2 className={styles.h2}>login</h2>
       <input
         type="text"
-        required
         name="login"
         placeholder="login"
         className={styles.input}
       />
       <input
         type="password"
-        required
         name="password"
         placeholder="password"
         className={styles.input}

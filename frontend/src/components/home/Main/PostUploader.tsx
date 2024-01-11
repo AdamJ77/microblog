@@ -5,10 +5,17 @@ import {
   AVAILABLE_IMAGE_EXTENSIONS,
   AVAILABLE_VIDEO_EXTENSIONS,
 } from "../../../constants";
+import { uploadMultipleFiles } from "../../../utils/uploadFiles";
+import axios from "axios";
+import { usePostsContext } from "../../../context/PostsProvider";
+import { v4 as uuidv4 } from "uuid";
+import { useHomePageContext } from "../../../context/HomePageContext";
 
 export default function PostUploader() {
+  const { user } = useHomePageContext();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
+  const { addPost } = usePostsContext();
 
   const handleTextareaChange = () => {
     if (!textareaRef.current) return;
@@ -34,13 +41,67 @@ export default function PostUploader() {
   };
 
   const me = {
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/99/Elon_Musk_Colorado_2022_%28cropped2%29.jpg",
-    alt: "Elon Musk",
+    image: user!.avatar,
+    alt: user!.username,
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const urls = await uploadMultipleFiles(selectedFiles);
+
+    const text = textareaRef.current!.value;
+
+    const preparedMedia = urls.map((url) => {
+      const splitted = url.split(".");
+      const ext = splitted[splitted.length - 1];
+
+      let type = null;
+      if (AVAILABLE_IMAGE_EXTENSIONS.includes(ext)) type = "image";
+      else if (AVAILABLE_VIDEO_EXTENSIONS.includes(ext)) type = "video";
+      else return;
+
+      return { type, src: url };
+    });
+
+    addPost({
+      id: uuidv4(),
+      body: textareaRef.current!.value,
+      media: urls,
+      created: new Date(),
+      author: {
+        id: user!.id,
+        name: user!.username,
+        avatar: user!.avatar,
+      },
+    });
+
+    const body = {
+      data: {
+        type: "posts",
+        attributes: {
+          body: text,
+          media: preparedMedia,
+        },
+      },
+    };
+
+    const data = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/posts`,
+      body,
+      {
+        withCredentials: true,
+      }
+    );
+
+    textareaRef.current!.value = "";
+    const input = document.querySelector("#file-input") as HTMLInputElement;
+    input.value = "";
+    setSelectedFiles([]);
   };
 
   return (
-    <form className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={handleSubmit}>
       <div className={styles.avatar}>
         <Avatar image={me.image} alt={me.alt} />
       </div>
@@ -54,6 +115,7 @@ export default function PostUploader() {
         <div>
           {selectedFiles.map((file, index) => (
             <button
+              key={index}
               title="remove"
               className={styles["uploaded-file-btn"]}
               onClick={(e) => {
@@ -97,13 +159,7 @@ export default function PostUploader() {
           />
         </label>
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-        className={styles.button}
-        type="submit"
-      >
+      <button className={styles.button} type="submit">
         tweet
       </button>
     </form>

@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { AVAILABLE_IMAGE_EXTENSIONS, DEFAULT_AVATAR } from "../../constants";
 import styles from "./style/SignupForm.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { uploadSingleFile } from "../../utils/uploadFiles";
+import { validateForm } from "./utils/validateForm";
+import { toast } from "react-toastify";
+import { errorConfig, successConfig } from "../../config/toasts";
 
 export default function SignupForm() {
   const [avatar, setAvatar] = useState(DEFAULT_AVATAR);
@@ -54,10 +59,39 @@ export default function SignupForm() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isValidPassword = form.password === form.confirmPassword;
-    console.log(form, isValidPassword);
+
+    const formData = new FormData(e.currentTarget);
+    const anyErrors = validateForm(formData);
+    if (anyErrors) return;
+
+    const file = formData.get("avatar") as File;
+    const url = await uploadSingleFile(file)!;
+
+    const body = {
+      login: formData.get("login"),
+      password: formData.get("password"),
+      username: formData.get("username"),
+      avatar: url,
+    };
+
+    const toastID = toast.loading("Please wait...");
+
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/signup`,
+        body,
+        {
+          withCredentials: true,
+        }
+      );
+      if (data.status !== 200) throw new Error();
+      toast.update(toastID, successConfig("Signed up successfully."));
+      navigate("/");
+    } catch (e) {
+      toast.update(toastID, errorConfig("An error occured when signing up."));
+    }
   };
 
   return (
@@ -96,10 +130,16 @@ export default function SignupForm() {
         <div style={{ width: "60%" }}>
           <input
             type="text"
+            name="username"
+            placeholder="username"
+            className={styles.input}
+            onChange={handleFormChange}
+          />
+          <input
+            type="text"
             name="login"
             placeholder="login"
             className={styles.input}
-            required
             onChange={handleFormChange}
           />
           <input
@@ -107,7 +147,6 @@ export default function SignupForm() {
             name="password"
             placeholder="password"
             className={styles.input}
-            required
             onChange={handleFormChange}
           />
           <input
@@ -115,7 +154,6 @@ export default function SignupForm() {
             name="confirmPassword"
             placeholder="confirm password"
             className={styles.input}
-            required
             onChange={handleFormChange}
           />
         </div>
