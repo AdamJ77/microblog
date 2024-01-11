@@ -156,7 +156,7 @@ jobs:
             echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
 
       - name: Use AKS context
-        run: kubectl config use-context aks-Microblog1 
+        run: kubectl config use-context deploy-context
 
       - name: Deploy to AKS
         run: |
