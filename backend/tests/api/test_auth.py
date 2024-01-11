@@ -86,7 +86,7 @@ def test_refresh(client):
 def test_user(client):
     new_user = signup_user(client)
     token = new_user["token"]
-    response = client.post("/auth/user", cookies={"token": token})
+    response = client.get("/auth/user", cookies={"token": token})
     assert response.status_code == 200
 
     data = response.json()
