@@ -47,7 +47,6 @@ def create_app():
         allow_headers=["*"],
     )
 
-
     app.include_router(router)
 
     return app
