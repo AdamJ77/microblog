@@ -19,7 +19,9 @@ class CustomLogger(logging.Logger):
         global formatter
         if formatter is not None:
             try:
-                ecs.index(index='microblog-backend-logs', body=json.dumps(formatter.format_to_ecs(record), default=lambda o: str(o)))
+                ecs.index(index='microblog-backend-logs',
+                          body=json.dumps(formatter.format_to_ecs(record),
+                                          default=lambda o: str(o)))
             except Exception as e:
                 print(e)
         super().handle(record)
@@ -56,7 +58,8 @@ def log_response(res: Response, req: Request, start_time: float):
             'duration': time.time() - start_time,
         }
     }
-    log.info(f'Request from {req.client.host}{port_frmtd} to {url} handled', extra=data)
+    log.info(f'Request from {req.client.host}{port_frmtd} to {url} handled',
+             extra=data)
 
 
 class LoggingRoute(APIRoute):
