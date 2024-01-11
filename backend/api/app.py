@@ -32,6 +32,7 @@ def create_app():
     router.include_router(posts.router)
     router.include_router(auth.router)
     router.include_router(static_files.router)
+    os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
     router.mount(
         "/static", StaticFiles(directory=STATIC_FOLDER_NAME), name="uploading")
 
@@ -46,7 +47,6 @@ def create_app():
         allow_headers=["*"],
     )
 
-    os.makedirs(STATIC_FOLDER_NAME, exist_ok=True)
 
     app.include_router(router)
 
