@@ -2,8 +2,6 @@ from testcontainers.mongodb import MongoDbContainer
 from backend.domain import entities
 from pathlib import Path
 import pytest
-import hashlib
-import asyncio
 
 
 @pytest.fixture(scope="session")
@@ -44,25 +42,3 @@ def post(post_author, media):
         media=[media],
         date=post_date,
     )
-
-
-async def async_get_user(client):
-    db = client.app.database
-
-    # Wstawianie nowego użytkownika do bazy danych
-    inserted_result = await db.users.insert_one({
-        "login": "fake_login",
-        "password": hashlib.sha256("fake_password".encode()).hexdigest(),
-        "avatar": "http://microblog/avatar.jpg",
-        "username": "user1"
-    })
-
-    # Pobieranie _id (ObjectId) z wyniku wstawiania i konwersja na string
-    user_id = str(inserted_result.inserted_id)
-
-    return user_id
-
-
-@pytest.fixture
-def get_user(client):
-    return asyncio.run(async_get_user(client))

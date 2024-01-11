@@ -1,7 +1,6 @@
 from backend.api.routers import posts
 from datetime import datetime
 import pytest
-from backend.api.routers.auth import create_jwt_token
 import random
 import string
 import hashlib
@@ -20,13 +19,6 @@ ADD_POST_REQUEST = {
         },
     }
 }
-
-
-def create_auth_cookie(id: str):
-    token = create_jwt_token({"id": id})
-    return {
-        "token": token
-    }
 
 
 def signup_user(client):
