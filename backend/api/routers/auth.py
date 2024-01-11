@@ -153,7 +153,7 @@ async def signup(request: Request):
     }
     access_token = create_jwt_token(token_data)
 
-    response = JSONResponse(content={"id": user_id})
+    response = JSONResponse(content={"id": user_id, "token": access_token})
     response.set_cookie(key="token", value=access_token, httponly=True,
                         secure=False, samesite="lax")
 
