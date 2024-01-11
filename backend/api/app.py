@@ -23,10 +23,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app():
-    router = APIRouter(
-        prefix='/api',
-        tags=['Auth']
-    )
+    router = APIRouter(prefix='/api')
     # including routers
     router.include_router(hello.router)
     router.include_router(posts.router)
