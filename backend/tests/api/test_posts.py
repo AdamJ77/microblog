@@ -35,7 +35,7 @@ def signup_user(client):
         "login": ''.join(random.choice(
             string.ascii_letters + string.digits) for _ in range(10)),
         "password": hashlib.sha256("fake_password".encode()).hexdigest(),
-        "avatar": "http://microblog.com/avatars/Greg.jpg"
+        "avatar": "http://microblog.com/avatars/Greg.png"
     }
     response = client.post("/auth/signup", json=body).json()
     return response
