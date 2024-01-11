@@ -140,3 +140,26 @@ jobs:
           context: ./frontend/
           push: true
           tags: ${{ secrets.DOCKERHUB_LOGIN }}/microblog-frontend:${{ github.run_number }}
+  deploy-to-aks:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: deploy-backend-docker-image
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        run: |
+            mkdir ${HOME}/.kube
+            echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+
+      - name: Use AKS context
+        run: kubectl config use-context aks-Microblog1 
+
+      - name: Deploy to AKS
+        run: |
+          sed -i "s|{{IMAGE_TAG}}|${{ github.run_number }}|g" infrastructure/kubernetes/deployment_manifests/*-deployment.yml
+          sed -i "s|{{CONNECTION_URL}}|${{ secrets.DB_CONNECTION_URL }}|g" infrastructure/kubernetes/deployment_manifests/backend-deployment.yml
+          chmod +x infrastructure/kubernetes/deployment_manifests/github_deployment.sh
+          ./infrastructure/kubernetes/deployment_manifests/github_deployment.sh

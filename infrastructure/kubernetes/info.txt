@@ -1,0 +1,5 @@
+# Get credentials to AKS
+az aks get-credentials --resource-group Microblog1 --name aks-Microblog1
+
+# Switch context
+kubectl config use-context aks-Microblog1

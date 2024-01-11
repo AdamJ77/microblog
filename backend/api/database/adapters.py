@@ -56,6 +56,7 @@ def post_to_doc(post: Post):
     }
     if post.id is not None:
         post_doc["_id"] = post.id
+
     return post_doc
 
 
