@@ -81,3 +81,15 @@ def test_refresh(client):
     response = client.post("/auth/refresh", cookies={"token": token})
     assert response.status_code == 200
     assert 'token' in response.cookies
+
+
+def test_user(client):
+    new_user = signup_user(client)
+    token = new_user["token"]
+    response = client.post("/auth/user", cookies={"token": token})
+    assert response.status_code == 200
+
+    data = response.json()
+    assert 'id' in data
+    assert data["username"] == "Greg"
+    assert data["avatar"] == "http://microblog.com/avatars/Greg.png"
