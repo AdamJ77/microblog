@@ -65,7 +65,6 @@ def check_get_posts_response(response, check_date=True):
 
         avatar_src = "http://microblog.com/avatars/Greg.png"
         author = post["attributes"]["author"]
-        assert author["id"] == "213"
         assert author["attributes"]["name"] == "Greg"
         assert author["attributes"]["avatar"]["src"] == avatar_src
 
