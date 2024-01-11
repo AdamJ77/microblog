@@ -65,3 +65,11 @@ def test_login_fails(client):
 
     response = client.post("/auth/login", json={})
     assert response.status_code == 400
+
+
+def test_logout(client):
+    new_user = signup_user(client)
+    token = new_user["token"]
+    response = client.post("/auth/logout", cookies={"token": token})
+    assert response.status_code == 200
+    assert 'token' in response.cookies
